@@ -56,3 +56,13 @@ export const verificationTokens = pgTable(
 		compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
 	})
 );
+
+export const userForm = pgTable('userForm', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	title: text('name'),
+	userId: text('userId')
+		.notNull()
+		.references(() => users.id, { onDelete: 'cascade' })
+});

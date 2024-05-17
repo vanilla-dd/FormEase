@@ -11,6 +11,12 @@ dependencies:
   '@auth/sveltekit':
     specifier: ^1.1.0
     version: 1.1.0(@sveltejs/kit@2.5.8)(svelte@4.2.17)
+  '@editorjs/editorjs':
+    specifier: ^2.29.1
+    version: 2.29.1
+  '@fontsource-variable/inter':
+    specifier: ^5.0.18
+    version: 5.0.18
   '@internationalized/date':
     specifier: ^3.5.3
     version: 3.5.3
@@ -85,6 +91,12 @@ devDependencies:
   drizzle-kit:
     specifier: ^0.21.2
     version: 0.21.2
+  editorjs-drag-drop:
+    specifier: ^1.1.14
+    version: 1.1.14
+  editorjs-undo:
+    specifier: ^2.0.28
+    version: 2.0.28
   eslint:
     specifier: ^8.56.0
     version: 8.57.0
@@ -198,6 +210,10 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.1
+    dev: false
+
+  /@editorjs/editorjs@2.29.1:
+    resolution: {integrity: sha512-WRT2pCfikMsvySQJqpCU21LfTZaPuxUWsDO8aFGrPx4MKzOR9D+Ur4mNb3jq0FXx2EMqvIWfTyFixJxtjGHTyQ==}
     dev: false
 
   /@esbuild-kit/core-utils@3.3.2:
@@ -861,6 +877,10 @@ packages:
 
   /@floating-ui/utils@0.2.2:
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
+    dev: false
+
+  /@fontsource-variable/inter@5.0.18:
+    resolution: {integrity: sha512-rJzSrtJ3b7djiGFvRuTe6stDfbYJGhdQSfn2SI2WfXviee7Er0yKAHE5u7FU7OWVQQQ1x3+cxdmx9NdiAkcrcA==}
     dev: false
 
   /@gcornut/valibot-json-schema@0.0.27(@types/json-schema@7.0.15)(esbuild-runner@2.2.2)(esbuild@0.20.2)(valibot@0.30.0):
@@ -1906,6 +1926,16 @@ packages:
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
+
+  /editorjs-drag-drop@1.1.14:
+    resolution: {integrity: sha512-FpH3ILtfsadWrb/VcRfET7kC2fK3cBnlrTBY4wjm1bLNSxpM/OSmaRToeJJMxaIuwMldkKyuG+qWP4CiOLUu3g==}
+    dev: true
+
+  /editorjs-undo@2.0.28:
+    resolution: {integrity: sha512-7MiLdjIsPOXn8+cHDeAt2HapVklg4vcLWWkd2eMMlGI6UVtwYSjdQquDSv9752B/fOEP1C3NMF2sdiCoZV3tTA==}
+    dependencies:
+      vanilla-caret-js: 1.1.0
+    dev: true
 
   /electron-to-chromium@1.4.769:
     resolution: {integrity: sha512-bZu7p623NEA2rHTc9K1vykl57ektSPQYFFqQir8BOYf6EKOB+yIsbFB9Kpm7Cgt6tsLr9sRkqfqSZUw7LP1XxQ==}
@@ -3798,6 +3828,10 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /vanilla-caret-js@1.1.0:
+    resolution: {integrity: sha512-vl3R4Xjqb+xnM0gYyg+wcqWGYwKKnkz58Yj29/FQB+w+yP7R8IR1DGoJnDIs05moEZiGlQUTabPMoEtnQNcrpQ==}
+    dev: true
 
   /vite@5.2.11(@types/node@20.12.12):
     resolution: {integrity: sha512-HndV31LWW05i1BLPMUCE1B9E9GFbOu1MbenhS58FuK6owSO5qHm7GiCotrNY1YE5rMeQSFBGmT5ZaLEjFizgiQ==}
