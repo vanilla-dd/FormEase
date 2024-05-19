@@ -2,15 +2,17 @@
 	import { onMount } from 'svelte';
 	import { ShortAnswer } from '$lib/components/blocks/shortAnswer';
 	import { LongAnswer } from '$lib/components/blocks/longAnswer';
+	import { Link } from '$lib/components/blocks/link';
+	import { Number } from '$lib/components/blocks/number';
 	onMount(async () => {
 		const EditorJs = (await import('@editorjs/editorjs')).default;
 		const Undo = await import('editorjs-undo');
 		const editor = new EditorJs({
 			tools: {
-				shortAnswer: {
-					class: ShortAnswer
-				},
-				longAnswer: LongAnswer
+				shortAnswer: ShortAnswer,
+				longAnswer: LongAnswer,
+				link: Link,
+				number: Number
 			},
 			inlineToolbar: true,
 			onReady: () => {
