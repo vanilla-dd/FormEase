@@ -3,6 +3,8 @@
 	import { ShortAnswer } from '$lib/components/blocks/shortAnswer';
 	import { LongAnswer } from '$lib/components/blocks/longAnswer';
 	import { Link } from '$lib/components/blocks/link';
+	import { Date } from '$lib/components/blocks/date';
+	import { Rating } from '$lib/components/blocks/rating';
 	import { Number } from '$lib/components/blocks/number';
 	onMount(async () => {
 		const EditorJs = (await import('@editorjs/editorjs')).default;
@@ -12,7 +14,9 @@
 				shortAnswer: ShortAnswer,
 				longAnswer: LongAnswer,
 				link: Link,
-				number: Number
+				number: Number,
+				date: Date,
+				rating: Rating
 			},
 			inlineToolbar: true,
 			onReady: () => {
