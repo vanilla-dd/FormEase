@@ -1,11 +1,9 @@
-export class ShortAnswer {
+export class LongAnswer {
 	static get toolbox() {
 		return {
-			title: 'Short Answer',
+			title: 'Long Answer',
 			icon: `
-		  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
-			<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 14H3M21 10H3"></path>
-		  </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-align-justify"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
 		`
 		};
 	}
@@ -19,20 +17,11 @@ export class ShortAnswer {
 		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
 		const button = document.createElement('button');
-		const svg = document.createElement('div');
-
-		svg.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
-		  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 14H3M21 10H3"></path>
-		</svg>
-	  `;
-		svg.classList.add('absolute', 'right-2', 'top-1/2', '-translate-y-1/2');
 
 		wrapper.classList.add(
 			'relative',
 			'cursor-text',
 			'custom-box-shadow',
-			'w-1/2',
 			'rounded-md',
 			'px-2',
 			'py-1.5'
@@ -46,12 +35,14 @@ export class ShortAnswer {
 			'w-full',
 			'outline-none',
 			'ring-0',
+			'min-h-20',
 			'before:absolute',
 			'before:inset-0',
 			"before:focus:content-['Type_placeholder_text']"
 		);
 
 		block.setAttribute('contentEditable', 'true');
+		block.setAttribute('spellCheck', 'false');
 		block.addEventListener('input', (e) => {
 			if (!e) return;
 			e.currentTarget.innerText !== ''
@@ -107,7 +98,6 @@ export class ShortAnswer {
 			false
 		);
 
-		wrapper.appendChild(svg);
 		wrapper.appendChild(block);
 		wrapper.appendChild(button);
 

@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { SimpleImage } from '../../lib/components/blocks/shortAnswer.js';
+	import { ShortAnswer } from '$lib/components/blocks/shortAnswer';
+	import { LongAnswer } from '$lib/components/blocks/longAnswer';
 	onMount(async () => {
 		const EditorJs = (await import('@editorjs/editorjs')).default;
 		const Undo = await import('editorjs-undo');
-		// const DragDrop = await import('editorjs-drag-drop');
 		const editor = new EditorJs({
 			tools: {
-				image: {
-					class: SimpleImage
-				}
+				shortAnswer: {
+					class: ShortAnswer
+				},
+				longAnswer: LongAnswer
 			},
 			inlineToolbar: true,
 			onReady: () => {
 				new DragDrop(editor);
+				new Undo({ editor });
 			}
 		});
 		setInterval(async () => {
@@ -31,7 +33,7 @@
 <div class="custom-box-shadow relative w-1/2 cursor-text rounded-md px-2 py-2 shadow">
 	<div
 		contenteditable="true"
-		class="relative text-base text-[#BBBAB8] caret-black outline-none ring-0 before:absolute before:inset-0 before:content-['Type_placeholder_text']"
+		class="relative min-h-20 text-base text-[#BBBAB8] caret-black outline-none ring-0 before:absolute before:inset-0 before:content-['Type_placeholder_text']"
 		on:input={(e) => {
 			e.currentTarget.innerText !== ''
 				? e.currentTarget.classList.remove("before:content-['Type_placeholder_text']")
