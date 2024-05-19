@@ -7,16 +7,84 @@ export class SimpleImage {
 	}
 
 	render() {
+		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
-		block.setAttribute('contentEditable', true);
-		block.innerText = 'sdfsdfd';
-		return block;
+		block.setAttribute('contentEditable', 'true');
+		wrapper.classList.add(
+			'relative',
+			'cursor-text',
+			'custom-box-shadow',
+			'w-1/2',
+			'rounded-md',
+			'px-2',
+			'py-2'
+		);
+		block.classList.add(
+			'relative',
+			'text-[#BBBAB8]',
+			'caret-black',
+			'h-full',
+			'w-full',
+			'outline-none',
+			'ring-0',
+			'before:absolute',
+			'before:inset-0',
+			"before:content-['Type_placeholder_text']"
+		);
+		block.addEventListener('input', (e) => {
+			if (!e) return;
+			e.currentTarget.innerText !== ''
+				? e.currentTarget.classList.remove("before:content-['Type_placeholder_text']")
+				: e.currentTarget.classList.add("before:content-['Type_placeholder_text']");
+		});
+		const buttom = document.createElement('button');
+		this.api.listeners.on(
+			buttom,
+			'click',
+			() => {
+				this.data.required = false;
+				console.log('Button clicked! Required field set to false.');
+				buttom.remove();
+			},
+			false
+		);
+		// this.api.listeners.off(
+		// 	buttom,
+		// 	'click',
+		// 	() => {
+		// 		console.log('Button clicked!');
+		// 	},
+		// 	false
+		// );
+		buttom.innerText = '*';
+		wrapper.appendChild(buttom);
+		wrapper.appendChild(block);
+		buttom.classList.add(
+			'absolute',
+			'-right-2',
+			'-top-2',
+			'flex',
+			'h-4',
+			'w-4',
+			'items-center',
+			'justify-center',
+			'rounded-full',
+			'bg-gray-300',
+			'pt-2',
+			'text-xl',
+			'font-semibold'
+		);
+		return wrapper;
 	}
 
 	save(blockContent) {
 		return {
 			placeholder: blockContent.innerText,
-			required: true
+			required: this.data.required ?? true
 		};
+	}
+	constructor({ data, api }) {
+		this.data = data;
+		this.api = api;
 	}
 }
