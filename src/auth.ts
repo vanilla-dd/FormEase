@@ -6,6 +6,7 @@ import { AUTH_GITHUB_ID, AUTH_GITHUB_SECRET } from '$env/static/private';
 
 export const { handle, signIn, signOut } = SvelteKitAuth({
 	adapter: DrizzleAdapter(db),
+	trustHost: true,
 	providers: [github({ clientId: AUTH_GITHUB_ID, clientSecret: AUTH_GITHUB_SECRET })],
 	pages: { signIn: '/signin' },
 	callbacks: {
