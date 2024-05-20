@@ -3,7 +3,7 @@
 	import { ShortAnswer } from '$lib/components/blocks/shortAnswer';
 	import { LongAnswer } from '$lib/components/blocks/longAnswer';
 	import { Link } from '$lib/components/blocks/link';
-	import { Date } from '$lib/components/blocks/date';
+	import { DateBlock } from '$lib/components/blocks/date';
 	import { Rating } from '$lib/components/blocks/rating';
 	import { Number } from '$lib/components/blocks/number';
 	onMount(async () => {
@@ -15,7 +15,7 @@
 				longAnswer: LongAnswer,
 				link: Link,
 				number: Number,
-				date: Date,
+				date: DateBlock,
 				rating: Rating
 			},
 			inlineToolbar: true,
