@@ -44,13 +44,16 @@ export class LinearRatingBlock {
 	};
 
 	render = () => {
+		const container = document.createElement('div');
 		this.wrapper = document.createElement('div');
 		this.updateRatingRange();
 		this.requiredButton = this.createRequiredButton();
 		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
-		this.wrapper.append(this.requiredButton);
+		container.append(this.requiredButton, this.wrapper);
 		this.updateRequiredButton();
-		return this.wrapper;
+		container.classList.add('relative', 'w-fit', 'pb-2.5', 'pr-2');
+
+		return container;
 	};
 
 	updateRatingRange = () => {
@@ -74,15 +77,7 @@ export class LinearRatingBlock {
 				);
 				this.wrapper.append(ratingElement);
 			}
-			this.wrapper.classList.add(
-				'relative',
-				'w-fit',
-				'flex',
-				'gap-2',
-				'rounded-md',
-				'mb-2.5',
-				'pr-2'
-			);
+			this.wrapper.classList.add('flex', 'gap-2', 'rounded-md');
 		}
 	};
 
@@ -105,12 +100,6 @@ export class LinearRatingBlock {
 		);
 		return button;
 	};
-
-	save = () => ({
-		required: this.data.required,
-		starting: this.data.starting,
-		end: this.data.end
-	});
 
 	createCheckbox(labelText, checked, onChange) {
 		const input = document.createElement('input');
@@ -140,5 +129,13 @@ export class LinearRatingBlock {
 		label.append(input);
 
 		return { label, input };
+	}
+	save() {
+		return {
+			required: this.data.required,
+			starting: this.data.starting,
+			end: this.data.end
+		};
+		s;
 	}
 }

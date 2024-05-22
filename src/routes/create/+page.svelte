@@ -28,9 +28,9 @@
 				// new Undo({ editor });
 			}
 		});
-		// setInterval(async () => {
-		// 	console.log(await editor.save());
-		// }, 5000);
+		setInterval(async () => {
+			console.log(await editor.save());
+		}, 5000);
 	});
 </script>
 
@@ -46,11 +46,7 @@
 		>
 			Form Title
 		</h1>
-		{#await import('@editorjs/editorjs')}
-			<div class="pb-[330px]"></div>
-		{:then}
-			<div id="editorjs" class="w-full"></div>
-		{/await}
+		<div id="editorjs" class="h-[300px] w-full"></div>
 	</div>
 </main>
 

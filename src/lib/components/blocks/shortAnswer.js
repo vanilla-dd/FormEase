@@ -11,10 +11,30 @@ export class ShortAnswer {
 	}
 
 	constructor({ data, api }) {
-		this.data = data;
+		this.data = { required: true, ...data };
 		this.api = api;
 	}
+	toggleRequired = () => {
+		this.data.required = !this.data.required;
+		this.updateRequiredButton();
+	};
 
+	updateRequiredButton = () => {
+		if (this.requiredButton) {
+			this.requiredButton.innerText = this.data.required ? '*' : '';
+			this.requiredButton.classList.toggle('hidden', !this.data.required);
+		}
+		if (this.requiredToggle) {
+			this.requiredToggle.checked = this.data.required;
+		}
+	};
+
+	renderSettings() {
+		const wrapper = document.createElement('div');
+		this.requiredToggle = this.createCheckbox('Required', this.data.required, this.toggleRequired);
+		wrapper.append(this.requiredToggle.label);
+		return wrapper;
+	}
 	render() {
 		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
@@ -78,15 +98,9 @@ export class ShortAnswer {
 			'font-semibold'
 		);
 
-		this.api.listeners.on(
-			button,
-			'click',
-			() => {
-				this.data.required = false;
-				button.remove();
-			},
-			false
-		);
+		this.requiredButton = this.createRequiredButton();
+		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
+		this.updateRequiredButton();
 
 		this.api.listeners.on(
 			block,
@@ -109,11 +123,42 @@ export class ShortAnswer {
 			false
 		);
 
-		wrapper.append(svg, block, button);
+		wrapper.append(svg, block, this.requiredButton);
 
 		return wrapper;
 	}
+	createRequiredButton = () => {
+		const button = document.createElement('button');
+		button.classList.add(
+			'absolute',
+			'-right-2',
+			'-top-2',
+			'flex',
+			'h-4',
+			'w-4',
+			'items-center',
+			'justify-center',
+			'rounded-full',
+			'bg-[#f3f3f3]',
+			'pt-2',
+			'text-lg',
+			'font-semibold'
+		);
+		return button;
+	};
+	createCheckbox(labelText, checked, onChange) {
+		const input = document.createElement('input');
+		input.type = 'checkbox';
+		input.checked = checked;
+		input.addEventListener('change', onChange);
 
+		const label = document.createElement('label');
+		label.innerText = labelText;
+		label.classList.add('cdx-settings-button');
+		label.append(input);
+
+		return { label, input };
+	}
 	save(blockContent) {
 		return {
 			placeholder: blockContent.innerText,
