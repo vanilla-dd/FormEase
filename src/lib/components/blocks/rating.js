@@ -43,7 +43,7 @@ export class Rating {
 		const block = document.createElement('div');
 		const button = document.createElement('button');
 
-		wrapper.classList.add('relative', 'w-fit');
+		wrapper.classList.add('relative', 'w-fit', 'mb-2.5');
 		block.classList.add('relative', 'flex');
 
 		for (let i = 0; i < 5; i++) {
@@ -81,8 +81,7 @@ export class Rating {
 			false
 		);
 
-		wrapper.appendChild(block);
-		wrapper.appendChild(button);
+		wrapper.append(block, button);
 
 		return wrapper;
 	}

@@ -31,7 +31,8 @@ export class Link {
 			'w-1/2',
 			'rounded-md',
 			'px-2',
-			'py-1.5'
+			'py-1.5',
+			'mb-2.5'
 		);
 
 		block.classList.add(
@@ -42,8 +43,9 @@ export class Link {
 			'w-full',
 			'outline-none',
 			'ring-0',
+			'px-1',
 			'before:absolute',
-			'before:inset-0',
+			'before:left-1',
 			"before:focus:content-['Type_placeholder_text']"
 		);
 
@@ -103,9 +105,7 @@ export class Link {
 			false
 		);
 
-		wrapper.appendChild(svg);
-		wrapper.appendChild(block);
-		wrapper.appendChild(button);
+		wrapper.append(svg, block, button);
 
 		return wrapper;
 	}

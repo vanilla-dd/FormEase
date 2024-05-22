@@ -2,16 +2,15 @@ export class LinearRatingBlock {
 	static toolbox = {
 		title: 'Linear Rating',
 		icon: `
-			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a2 2 0 100-4 2 2 0 000 4zM20 14a2 2 0 100-4 2 2 0 000 4zM4 14a2 2 0 100-4 2 2 0 000 4zM21 12H3"></path></svg>
-		`
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
+		  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a2 2 0 100-4 2 2 0 000 4zM20 14a2 2 0 100-4 2 2 0 000 4zM4 14a2 2 0 100-4 2 2 0 000 4zM21 12H3"></path>
+		</svg>
+	  `
 	};
 
 	constructor({ data, api }) {
-		this.data = data;
+		this.data = { required: true, starting: 1, end: 10, ...data };
 		this.api = api;
-		this.data.required = data.required ?? true;
-		this.data.starting = data.starting ?? 1;
-		this.data.end = data.end ?? 10;
 	}
 
 	toggleRequired = () => {
@@ -31,19 +30,15 @@ export class LinearRatingBlock {
 
 	renderSettings = () => {
 		const wrapper = document.createElement('div');
-
 		this.requiredToggle = this.createCheckbox('Required', this.data.required, this.toggleRequired);
-
-		const startingInput = this.createNumberInput(this.data.starting, (value) => {
+		const startingInput = this.createNumberInput('Start: ', this.data.starting, (value) => {
 			this.data.starting = value;
 			this.updateRatingRange();
 		});
-
-		const endingInput = this.createNumberInput(this.data.end, (value) => {
+		const endingInput = this.createNumberInput('End: ', this.data.end, (value) => {
 			this.data.end = value;
 			this.updateRatingRange();
 		});
-
 		wrapper.append(this.requiredToggle.label, startingInput.label, endingInput.label);
 		return wrapper;
 	};
@@ -51,14 +46,10 @@ export class LinearRatingBlock {
 	render = () => {
 		this.wrapper = document.createElement('div');
 		this.updateRatingRange();
-
 		this.requiredButton = this.createRequiredButton();
-
 		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
-
 		this.wrapper.append(this.requiredButton);
 		this.updateRequiredButton();
-
 		return this.wrapper;
 	};
 
@@ -66,10 +57,22 @@ export class LinearRatingBlock {
 		if (this.wrapper) {
 			this.wrapper.innerHTML = '';
 			for (let index = this.data.starting; index <= this.data.end; index++) {
-				const l = document.createElement('div');
-				l.innerText = `${index}`;
-				l.classList.add('rounded-md', 'bg-gray-400', 'px-4', 'py-2', 'custom-box-shadow');
-				this.wrapper.append(l);
+				const ratingElement = document.createElement('div');
+				ratingElement.innerText = `${index}`;
+				ratingElement.classList.add(
+					'rounded-md',
+					'custom-box-shadow',
+					'font-500',
+					'cursor-pointer',
+					'bg-white',
+					'flex',
+					'justify-center',
+					'items-center',
+					'min-w-9',
+					'min-h-9',
+					'custom-box-shadow'
+				);
+				this.wrapper.append(ratingElement);
 			}
 			this.wrapper.classList.add(
 				'relative',
@@ -77,8 +80,8 @@ export class LinearRatingBlock {
 				'flex',
 				'gap-2',
 				'rounded-md',
-				'px-2',
-				'py-2'
+				'mb-2.5',
+				'pr-2'
 			);
 		}
 	};
@@ -103,8 +106,7 @@ export class LinearRatingBlock {
 		return button;
 	};
 
-	save = (blockContent) => ({
-		// placeholder: blockContent.innerText,
+	save = () => ({
 		required: this.data.required,
 		starting: this.data.starting,
 		end: this.data.end
@@ -124,7 +126,7 @@ export class LinearRatingBlock {
 		return { label, input };
 	}
 
-	createNumberInput(value, onChange) {
+	createNumberInput(labelText, value, onChange) {
 		const input = document.createElement('input');
 		input.type = 'number';
 		input.value = value;
@@ -134,8 +136,7 @@ export class LinearRatingBlock {
 		});
 
 		const label = document.createElement('label');
-		label.innerText =
-			input.type === 'number' ? (value === this.data.starting ? 'Start: ' : 'End: ') : '';
+		label.innerText = labelText;
 		label.append(input);
 
 		return { label, input };

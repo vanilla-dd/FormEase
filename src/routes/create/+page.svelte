@@ -9,8 +9,9 @@
 	import { LinearRatingBlock } from '$lib/components/blocks/linearRating';
 	onMount(async () => {
 		const EditorJs = (await import('@editorjs/editorjs')).default;
-		const Undo = await import('editorjs-undo');
+		// const Undo = await import('editorjs-undo');
 		const editor = new EditorJs({
+			autofocus: true,
 			tools: {
 				shortAnswer: ShortAnswer,
 				longAnswer: LongAnswer,
@@ -22,13 +23,14 @@
 			},
 			inlineToolbar: true,
 			onReady: () => {
+				// @ts-ignore
 				new DragDrop(editor);
-				new Undo({ editor });
+				// new Undo({ editor });
 			}
 		});
-		setInterval(async () => {
-			console.log(await editor.save());
-		}, 5000);
+		// setInterval(async () => {
+		// 	console.log(await editor.save());
+		// }, 5000);
 	});
 </script>
 
@@ -36,9 +38,23 @@
 	<script src="https://cdn.jsdelivr.net/npm/editorjs-drag-drop"></script>
 </svelte:head>
 
-<div id="editorjs"></div>
+<main class="flex min-h-dvh w-full items-center justify-center">
+	<div class="w-full px-4">
+		<h1
+			class="whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none text-[#37352f] caret-current outline-none"
+			contenteditable="true"
+		>
+			Form Title
+		</h1>
+		{#await import('@editorjs/editorjs')}
+			<div class="pb-[330px]"></div>
+		{:then}
+			<div id="editorjs" class="w-full"></div>
+		{/await}
+	</div>
+</main>
 
-<div class="relative flex w-fit cursor-text gap-2 rounded-md px-2 py-2">
+<!-- <div class="relative flex w-fit cursor-text gap-2 rounded-md px-2 py-2">
 	{#each Array(10) as ar, i}
 		<div class="rounded-md bg-gray-400 px-4 py-2">{i}</div>
 	{/each}
@@ -46,4 +62,4 @@
 		class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-300 pt-2 text-xl font-semibold"
 		>*</button
 	>
-</div>
+</div> -->

@@ -79,7 +79,8 @@ export class DateBlock {
 			'w-1/2',
 			'rounded-md',
 			'px-2',
-			'py-1.5'
+			'py-1.5',
+			'mb-2.5'
 		);
 		return wrapper;
 	}
@@ -93,7 +94,8 @@ export class DateBlock {
 			'h-full',
 			'w-full',
 			'outline-none',
-			'ring-0'
+			'ring-0',
+			'px-1'
 		);
 		block.setAttribute('contentEditable', 'true');
 		block.dataset.placeholder = 'Type placeholder text';
