@@ -15,6 +15,27 @@ export class Rating {
 		this.api = api;
 	}
 
+	toggleRequired = () => {
+		this.data.required = !this.data.required;
+		this.updateRequiredButton();
+	};
+
+	updateRequiredButton = () => {
+		if (this.requiredButton) {
+			this.requiredButton.classList.toggle('!hidden', !this.data.required);
+		}
+		if (this.requiredToggle) {
+			this.requiredToggle.checked = this.data.required;
+		}
+	};
+
+	renderSettings() {
+		const wrapper = document.createElement('div');
+		this.requiredToggle = this.createCheckbox('Required', this.data.required, this.toggleRequired);
+		wrapper.append(this.requiredToggle.label);
+		return wrapper;
+	}
+
 	createStar() {
 		const svgNS = 'http://www.w3.org/2000/svg';
 		const star = document.createElementNS(svgNS, 'svg');
@@ -41,7 +62,6 @@ export class Rating {
 	render() {
 		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
-		const button = document.createElement('button');
 
 		wrapper.classList.add('relative', 'w-fit', 'mb-2.5');
 		block.classList.add('relative', 'flex');
@@ -54,34 +74,10 @@ export class Rating {
 			star.addEventListener('mouseout', () => this.resetStars(block));
 		}
 
-		button.innerText = '*';
-		button.classList.add(
-			'absolute',
-			'-right-4',
-			'top-0',
-			'flex',
-			'h-4',
-			'w-4',
-			'items-center',
-			'justify-center',
-			'rounded-full',
-			'bg-[#f3f3f3]',
-			'pt-2',
-			'text-lg',
-			'font-semibold'
-		);
-
-		this.api.listeners.on(
-			button,
-			'click',
-			() => {
-				this.data.required = false;
-				button.remove();
-			},
-			false
-		);
-
-		wrapper.append(block, button);
+		this.requiredButton = this.createRequiredButton();
+		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
+		this.updateRequiredButton();
+		wrapper.append(block, this.requiredButton);
 
 		return wrapper;
 	}
@@ -98,6 +94,27 @@ export class Rating {
 		for (const star of stars) {
 			star.classList.remove('fill-[#FFBE01]', 'stroke-[#FFBE01]');
 		}
+	}
+
+	createRequiredButton = () => {
+		const button = document.createElement('button');
+		button.innerText = '*';
+		button.classList.add('requiredButton');
+		return button;
+	};
+
+	createCheckbox(labelText, checked, onChange) {
+		const input = document.createElement('input');
+		input.type = 'checkbox';
+		input.checked = checked;
+		input.addEventListener('change', onChange);
+
+		const label = document.createElement('label');
+		label.innerText = labelText;
+		label.classList.add('cdx-settings-button');
+		label.append(input);
+
+		return { label, input };
 	}
 
 	save(blockContent) {

@@ -20,8 +20,7 @@ export class LinearRatingBlock {
 
 	updateRequiredButton = () => {
 		if (this.requiredButton) {
-			this.requiredButton.innerText = this.data.required ? '*' : '';
-			this.requiredButton.classList.toggle('hidden', !this.data.required);
+			this.requiredButton.classList.toggle('!hidden', !this.data.required);
 		}
 		if (this.requiredToggle) {
 			this.requiredToggle.checked = this.data.required;
@@ -29,8 +28,8 @@ export class LinearRatingBlock {
 	};
 
 	renderSettings = () => {
-		const wrapper = document.createElement('div');
 		this.requiredToggle = this.createCheckbox('Required', this.data.required, this.toggleRequired);
+		const wrapper = document.createElement('div');
 		const startingInput = this.createNumberInput('Start: ', this.data.starting, (value) => {
 			this.data.starting = value;
 			this.updateRatingRange();
@@ -43,7 +42,7 @@ export class LinearRatingBlock {
 		return wrapper;
 	};
 
-	render = () => {
+	render() {
 		const container = document.createElement('div');
 		this.wrapper = document.createElement('div');
 		this.updateRatingRange();
@@ -54,7 +53,7 @@ export class LinearRatingBlock {
 		container.classList.add('relative', 'w-fit', 'pb-2.5', 'pr-2');
 
 		return container;
-	};
+	}
 
 	updateRatingRange = () => {
 		if (this.wrapper) {
@@ -83,21 +82,8 @@ export class LinearRatingBlock {
 
 	createRequiredButton = () => {
 		const button = document.createElement('button');
-		button.classList.add(
-			'absolute',
-			'-right-2',
-			'-top-2',
-			'flex',
-			'h-4',
-			'w-4',
-			'items-center',
-			'justify-center',
-			'rounded-full',
-			'bg-[#f3f3f3]',
-			'pt-2',
-			'text-lg',
-			'font-semibold'
-		);
+		button.innerText = '*';
+		button.classList.add('requiredButton');
 		return button;
 	};
 
@@ -136,6 +122,5 @@ export class LinearRatingBlock {
 			starting: this.data.starting,
 			end: this.data.end
 		};
-		s;
 	}
 }

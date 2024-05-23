@@ -12,9 +12,8 @@ export class DateBlock {
 	};
 
 	constructor({ data, api }) {
-		this.data = data || {};
+		this.data = { required: true, ...data };
 		this.api = api;
-		this.data.required = this.data.required ?? true;
 	}
 
 	toggleRequired() {
@@ -24,13 +23,7 @@ export class DateBlock {
 
 	updateRequiredButton() {
 		if (this.requiredButton) {
-			if (this.data.required) {
-				this.requiredButton.innerText = '*';
-				this.requiredButton.classList.remove('hidden');
-			} else {
-				this.requiredButton.innerText = '';
-				this.requiredButton.classList.add('hidden');
-			}
+			this.requiredButton.classList.toggle('!hidden', !this.data.required);
 		}
 		if (this.requiredToggle) {
 			this.requiredToggle.checked = this.data.required;
@@ -64,7 +57,17 @@ export class DateBlock {
 
 		this.api.listeners.on(this.requiredButton, 'click', () => this.toggleRequired());
 		this.api.listeners.on(block, 'keydown', (e) => this.handleKeyDown(e, block));
+		const updatePlaceholder = () => {
+			if (block.innerText.trim() === '') {
+				block.classList.add("before:focus:content-['Type_placeholder_text']");
+			} else {
+				block.classList.remove("before:focus:content-['Type_placeholder_text']");
+			}
+		};
 
+		updatePlaceholder();
+
+		block.addEventListener('input', updatePlaceholder);
 		wrapper.append(svg, block, this.requiredButton);
 		this.updateRequiredButton();
 
@@ -88,29 +91,10 @@ export class DateBlock {
 
 	createBlock() {
 		const block = document.createElement('div');
-		block.classList.add(
-			'relative',
-			'text-[#BBBAB8]',
-			'caret-black',
-			'h-full',
-			'w-full',
-			'outline-none',
-			'ring-0',
-			'px-1'
-		);
+		block.classList.add('inputBlock');
 		block.setAttribute('contentEditable', 'true');
-		block.dataset.placeholder = 'Type placeholder text';
-		block.addEventListener('input', this.updatePlaceholder.bind(this, block));
-		this.updatePlaceholder(block);
-		return block;
-	}
 
-	updatePlaceholder(block) {
-		if (block.innerText.trim() === '') {
-			block.classList.add("before:focus:content-['Type_placeholder_text']");
-		} else {
-			block.classList.remove("before:focus:content-['Type_placeholder_text']");
-		}
+		return block;
 	}
 
 	createSvg() {
@@ -122,21 +106,8 @@ export class DateBlock {
 
 	createRequiredButton() {
 		const button = document.createElement('button');
-		button.classList.add(
-			'absolute',
-			'-right-2',
-			'-top-2',
-			'flex',
-			'h-4',
-			'w-4',
-			'items-center',
-			'justify-center',
-			'rounded-full',
-			'bg-[#f3f3f3]',
-			'pt-2',
-			'text-lg',
-			'font-semibold'
-		);
+		button.innerText = '*';
+		button.classList.add('requiredButton');
 		return button;
 	}
 

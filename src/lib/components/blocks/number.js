@@ -13,76 +13,58 @@ export class Number {
 		this.api = api;
 	}
 
+	toggleRequired = () => {
+		this.data.required = !this.data.required;
+		this.updateRequiredButton();
+	};
+
+	updateRequiredButton = () => {
+		if (this.requiredButton) {
+			this.requiredButton.classList.toggle('!hidden', !this.data.required);
+		}
+		if (this.requiredToggle) {
+			this.requiredToggle.checked = this.data.required;
+		}
+	};
+
+	renderSettings() {
+		const wrapper = document.createElement('div');
+		this.requiredToggle = this.createCheckbox('Required', this.data.required, this.toggleRequired);
+		wrapper.append(this.requiredToggle.label);
+		return wrapper;
+	}
+
 	render() {
 		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
-		const button = document.createElement('button');
 		const svg = document.createElement('div');
 		block.innerHTML = this.data.placeholder ?? '';
+		const updatePlaceholder = () => {
+			if (block.innerText.trim() === '') {
+				block.classList.add("before:focus:content-['Type_placeholder_text']");
+			} else {
+				block.classList.remove("before:focus:content-['Type_placeholder_text']");
+			}
+		};
+
+		updatePlaceholder();
+
+		block.addEventListener('input', updatePlaceholder);
+		block.setAttribute('contenteditable', 'true');
 		svg.innerHTML = `
 		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hash"><line x1="4" x2="20" y1="9" y2="9"></line><line x1="4" x2="20" y1="15" y2="15"></line><line x1="10" x2="8" y1="3" y2="21"></line><line x1="16" x2="14" y1="3" y2="21"></line></svg>
 	  `;
 		svg.classList.add('absolute', 'right-2', 'top-1/2', '-translate-y-1/2');
 
-		wrapper.classList.add(
-			'relative',
-			'cursor-text',
-			'custom-box-shadow',
-			'w-1/2',
-			'rounded-md',
-			'px-2',
-			'py-1.5',
-			'mb-2.5'
-		);
+		wrapper.classList.add('inputWrapper', 'w-1/2');
 
-		block.classList.add(
-			'relative',
-			'text-[#BBBAB8]',
-			'caret-black',
-			'h-full',
-			'w-full',
-			'outline-none',
-			'ring-0',
-			'px-1',
-			'before:absolute',
-			'before:left-1',
-			"before:focus:content-['Type_placeholder_text']"
-		);
+		updatePlaceholder();
 
-		block.setAttribute('contentEditable', 'true');
-		block.addEventListener('input', (e) => {
-			if (!e) return;
-			e.currentTarget.innerText !== ''
-				? e.currentTarget.classList.remove("before:focus:content-['Type_placeholder_text']")
-				: e.currentTarget.classList.add("before:focus:content-['Type_placeholder_text']");
-		});
+		block.addEventListener('input', updatePlaceholder);
 
-		button.innerText = '*';
-		button.classList.add(
-			'absolute',
-			'-right-2',
-			'-top-2',
-			'flex',
-			'h-4',
-			'w-4',
-			'items-center',
-			'justify-center',
-			'rounded-full',
-			'bg-[#f3f3f3]',
-			'pt-2',
-			'text-lg',
-			'font-semibold'
-		);
-
-		this.api.listeners.on(
-			button,
-			'click',
-			() => {
-				this.data.required = false;
-				button.remove();
-			},
-			false
-		);
+		this.requiredButton = this.createRequiredButton();
+		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
+		this.updateRequiredButton();
 
 		this.api.listeners.on(
 			block,
@@ -105,9 +87,30 @@ export class Number {
 			false
 		);
 
-		wrapper.append(svg, block, button);
+		wrapper.append(svg, block, this.requiredButton);
 
 		return wrapper;
+	}
+
+	createRequiredButton = () => {
+		const button = document.createElement('button');
+		button.innerText = '*';
+		button.classList.add('requiredButton');
+		return button;
+	};
+
+	createCheckbox(labelText, checked, onChange) {
+		const input = document.createElement('input');
+		input.type = 'checkbox';
+		input.checked = checked;
+		input.addEventListener('change', onChange);
+
+		const label = document.createElement('label');
+		label.innerText = labelText;
+		label.classList.add('cdx-settings-button');
+		label.append(input);
+
+		return { label, input };
 	}
 
 	save(blockContent) {
