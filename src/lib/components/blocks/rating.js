@@ -11,7 +11,7 @@ export class Rating {
 	}
 
 	constructor({ data, api }) {
-		this.data = data || {};
+		this.data = { required: true, ...data };
 		this.api = api;
 	}
 

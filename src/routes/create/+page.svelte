@@ -30,10 +30,13 @@
 				new DragDrop(editor);
 				// new Undo({ editor });
 			},
-			async onChange(api, event) {
-				FormBuilderData.set(await editor.save());
+			async onChange() {
+				const editorData = await editor.save();
+				FormBuilderData.update((curr) => {
+					return { ...curr, data: editorData };
+				});
 			},
-			data: StoredFormBuilderData
+			data: StoredFormBuilderData.data
 		});
 	});
 </script>
@@ -47,8 +50,13 @@
 		<h1
 			class="whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none text-[#37352f] caret-current outline-none"
 			contenteditable="true"
+			on:input={(e) => {
+				FormBuilderData.update((curr) => {
+					return { ...curr, title: e.currentTarget.innerText };
+				});
+			}}
 		>
-			Form Title
+			{$FormBuilderData.title}
 		</h1>
 		<div id="editorjs" class="h-[300px] w-full"></div>
 	</div>

@@ -77,6 +77,7 @@ export class Number {
 			},
 			false
 		);
+		block.classList.add('inputBlock');
 		this.api.listeners.on(
 			block,
 			'keydown',
