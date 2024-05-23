@@ -17,6 +17,7 @@ export class LongAnswer {
 		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
 		const button = document.createElement('button');
+		block.innerText = this.data.placeholder ?? '';
 
 		wrapper.classList.add(
 			'relative',
@@ -106,8 +107,9 @@ export class LongAnswer {
 	}
 
 	save(blockContent) {
+		const block = blockContent.querySelector('div[contenteditable="true"]');
 		return {
-			placeholder: blockContent.innerText,
+			placeholder: block ? block.innerText.trim() : '',
 			required: this.data.required ?? true
 		};
 	}

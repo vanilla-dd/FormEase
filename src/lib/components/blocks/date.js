@@ -60,6 +60,7 @@ export class DateBlock {
 		const block = this.createBlock();
 		const svg = this.createSvg();
 		this.requiredButton = this.createRequiredButton();
+		block.innerText = this.data.placeholder ?? '';
 
 		this.api.listeners.on(this.requiredButton, 'click', () => this.toggleRequired());
 		this.api.listeners.on(block, 'keydown', (e) => this.handleKeyDown(e, block));
@@ -150,8 +151,9 @@ export class DateBlock {
 	}
 
 	save(blockContent) {
+		const block = blockContent.querySelector('div[contenteditable="true"]');
 		return {
-			placeholder: blockContent.innerText,
+			placeholder: block ? block.innerText.trim() : '',
 			required: this.data.required
 		};
 	}

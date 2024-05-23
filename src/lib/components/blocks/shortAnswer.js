@@ -21,7 +21,7 @@ export class ShortAnswer {
 
 	updateRequiredButton = () => {
 		if (this.requiredButton) {
-			this.requiredButton.innerText = this.data.required ? '*' : '';
+			// this.requiredButton.innerText = this.data.required ? '*' : '';
 			this.requiredButton.classList.toggle('hidden', !this.data.required);
 		}
 		if (this.requiredToggle) {
@@ -40,7 +40,7 @@ export class ShortAnswer {
 		const block = document.createElement('div');
 		const button = document.createElement('button');
 		const svg = document.createElement('div');
-
+		block.innerText = this.data.placeholder ?? '';
 		svg.innerHTML = `
 		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
 		  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 14H3M21 10H3"></path>
@@ -81,7 +81,6 @@ export class ShortAnswer {
 				: e.currentTarget.classList.add("before:focus:content-['Type_placeholder_text']");
 		});
 
-		button.innerText = '*';
 		button.classList.add(
 			'absolute',
 			'-right-2',
@@ -113,6 +112,7 @@ export class ShortAnswer {
 			},
 			false
 		);
+
 		this.api.listeners.on(
 			block,
 			'keydown',
@@ -129,6 +129,7 @@ export class ShortAnswer {
 	}
 	createRequiredButton = () => {
 		const button = document.createElement('button');
+		button.innerText = '*';
 		button.classList.add(
 			'absolute',
 			'-right-2',
@@ -160,8 +161,9 @@ export class ShortAnswer {
 		return { label, input };
 	}
 	save(blockContent) {
+		const block = blockContent.querySelector('div[contenteditable="true"]');
 		return {
-			placeholder: blockContent.innerText,
+			placeholder: block ? block.innerText.trim() : '',
 			required: this.data.required ?? true
 		};
 	}

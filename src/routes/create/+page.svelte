@@ -7,11 +7,14 @@
 	import { Rating } from '$lib/components/blocks/rating';
 	import { Number } from '$lib/components/blocks/number';
 	import { LinearRatingBlock } from '$lib/components/blocks/linearRating';
+	import { FormBuilderData } from '$lib/localStorage';
+	import { get } from 'svelte/store';
 	onMount(async () => {
+		const StoredFormBuilderData = get(FormBuilderData);
 		const EditorJs = (await import('@editorjs/editorjs')).default;
 		// const Undo = await import('editorjs-undo');
 		const editor = new EditorJs({
-			autofocus: true,
+			// autofocus: true,
 			tools: {
 				shortAnswer: ShortAnswer,
 				longAnswer: LongAnswer,
@@ -26,11 +29,12 @@
 				// @ts-ignore
 				new DragDrop(editor);
 				// new Undo({ editor });
-			}
+			},
+			async onChange(api, event) {
+				FormBuilderData.set(await editor.save());
+			},
+			data: StoredFormBuilderData
 		});
-		setInterval(async () => {
-			console.log(await editor.save());
-		}, 5000);
 	});
 </script>
 
@@ -49,13 +53,3 @@
 		<div id="editorjs" class="h-[300px] w-full"></div>
 	</div>
 </main>
-
-<!-- <div class="relative flex w-fit cursor-text gap-2 rounded-md px-2 py-2">
-	{#each Array(10) as ar, i}
-		<div class="rounded-md bg-gray-400 px-4 py-2">{i}</div>
-	{/each}
-	<button
-		class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-300 pt-2 text-xl font-semibold"
-		>*</button
-	>
-</div> -->
