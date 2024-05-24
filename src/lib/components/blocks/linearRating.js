@@ -76,7 +76,7 @@ export class LinearRatingBlock {
 				);
 				this.wrapper.append(ratingElement);
 			}
-			this.wrapper.classList.add('flex', 'gap-2', 'rounded-md');
+			this.wrapper.classList.add('flex', 'gap-2', 'rounded-md', 'flex-wrap');
 		}
 	};
 
