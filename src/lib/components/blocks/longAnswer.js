@@ -9,7 +9,7 @@ export class LongAnswer {
 	}
 
 	constructor({ data, api }) {
-		this.data = data;
+		this.data = { required: true, ...data };
 		this.api = api;
 	}
 

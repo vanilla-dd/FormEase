@@ -33,7 +33,7 @@
 	];
 </script>
 
-<Sheet.Root open={true}>
+<Sheet.Root open={designPanelState}>
 	<Sheet.Content>
 		<Sheet.Header>
 			<Sheet.Title>Design</Sheet.Title>
@@ -70,7 +70,7 @@
 </Sheet.Root>
 
 <div
-	class="group/buttons relative -mt-10 flex h-[25vh] w-full items-center justify-center bg-transparent"
+	class="group/buttons relative -mt-10 flex h-[20vh] w-full items-center justify-center bg-transparent"
 >
 	<img
 		bind:this={coverImg}
@@ -79,7 +79,7 @@
 		alt="form-cover"
 	/>
 	<div
-		class="absolute -bottom-14 flex w-full justify-center gap-2 py-4 text-[#898884] opacity-0 focus-within:opacity-100 hover:opacity-100 group-hover/buttons:opacity-100"
+		class="absolute -bottom-12 flex w-full justify-center gap-2 pb-1 pt-2 text-[#898884] opacity-0 focus-within:opacity-100 hover:opacity-100 group-hover/buttons:opacity-100"
 	>
 		{#each buttons as button}
 			<button

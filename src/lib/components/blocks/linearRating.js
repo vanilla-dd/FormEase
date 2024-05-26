@@ -50,7 +50,7 @@ export class LinearRatingBlock {
 		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
 		container.append(this.requiredButton, this.wrapper);
 		this.updateRequiredButton();
-		container.classList.add('relative', 'w-fit', 'pb-2.5', 'pr-2');
+		container.classList.add('relative', 'w-fit', 'pb-2.5', 'pr-4');
 
 		return container;
 	}

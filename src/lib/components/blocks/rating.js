@@ -63,7 +63,7 @@ export class Rating {
 		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
 
-		wrapper.classList.add('relative', 'w-fit', 'mb-2.5');
+		wrapper.classList.add('relative', 'w-fit', 'mb-2.5', 'pr-2');
 		block.classList.add('relative', 'flex');
 
 		for (let i = 0; i < 5; i++) {
