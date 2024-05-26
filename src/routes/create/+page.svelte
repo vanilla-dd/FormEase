@@ -9,7 +9,7 @@
 	import { LinearRatingBlock } from '$lib/components/blocks/linearRating';
 	import { FormBuilderData } from '$lib/localStorage';
 	import { get } from 'svelte/store';
-	import { ChevronRight } from 'lucide-svelte';
+	import { ArrowRight, ChevronRight } from 'lucide-svelte';
 	import FormCover from '$lib/components/FormCover.svelte';
 	let editor: any;
 	const StoredFormBuilderData = get(FormBuilderData);
@@ -19,7 +19,6 @@
 		editor = new EditorJs({
 			// autofocus: true,
 			tools: {
-				title: TitleBlock,
 				shortAnswer: ShortAnswer,
 				longAnswer: LongAnswer,
 				link: Link,
@@ -49,9 +48,8 @@
 <svelte:head>
 	<script src="https://cdn.jsdelivr.net/npm/editorjs-drag-drop"></script>
 </svelte:head>
-
-<main class="flex min-h-dvh flex-col">
-	<header class="px-3 pt-4">
+<main class={`${$FormBuilderData.settings.theme ?? 'light'} flex min-h-dvh flex-col`} id="main">
+	<header class="px-3 py-4">
 		<div class="flex items-center gap-1">
 			<a href="/" class="group rounded-md p-1.5 transition-colors hover:bg-[#37352f17]">
 				<svg
@@ -70,11 +68,13 @@
 			</p>
 		</div>
 	</header>
-	<div class="grid w-full flex-1 place-items-center">
+	<div
+		class="grid w-full flex-1 place-items-center text-[#37352f] dark:bg-[#191919] dark:text-[#5A5A5A]"
+	>
 		<FormCover />
 		<div class="-mt-10 flex w-full max-w-[700px] flex-col items-stretch px-4">
 			<h1
-				class="place-self-start whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none text-[#37352f] caret-current outline-none md:pl-2"
+				class="place-self-start whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none caret-black outline-none dark:caret-white md:pl-2"
 				contenteditable="true"
 				on:keydown={(e) => {
 					if (e.key === 'Enter') {
@@ -97,6 +97,12 @@
 				{$FormBuilderData.formMetaData?.title || 'Form Title'}
 			</h1>
 			<div id="editorjs" class="h-[300px]" />
+			<div class="md:pl-2">
+				<button
+					class="flex items-center gap-1 self-start rounded-md bg-black px-4 py-2 font-bold text-white dark:bg-[#7957FF] dark:text-white"
+					>Submit <ArrowRight class="h-4 w-4 stroke-2" /></button
+				>
+			</div>
 		</div>
 	</div>
 </main>

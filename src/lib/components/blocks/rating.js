@@ -48,7 +48,7 @@ export class Rating {
 		star.setAttribute('stroke-linecap', 'round');
 		star.setAttribute('stroke-linejoin', 'round');
 		star.classList.add('lucide', 'lucide-star');
-
+		star.classList.add('dark:stroke-[#5A5A5A]');
 		const polygon = document.createElementNS(svgNS, 'polygon');
 		polygon.setAttribute(
 			'points',
@@ -85,14 +85,14 @@ export class Rating {
 	highlightStars(block, index) {
 		const stars = block.children;
 		for (let i = 0; i <= index; i++) {
-			stars[i].classList.add('fill-[#FFBE01]', 'stroke-[#FFBE01]');
+			stars[i].classList.add('fill-[#FFBE01]', '!stroke-[#FFBE01]');
 		}
 	}
 
 	resetStars(block) {
 		const stars = block.children;
 		for (const star of stars) {
-			star.classList.remove('fill-[#FFBE01]', 'stroke-[#FFBE01]');
+			star.classList.remove('fill-[#FFBE01]', '!stroke-[#FFBE01]');
 		}
 	}
 

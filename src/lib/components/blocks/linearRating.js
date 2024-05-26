@@ -64,6 +64,9 @@ export class LinearRatingBlock {
 				ratingElement.classList.add(
 					'rounded-md',
 					'custom-box-shadow',
+					'dark:custom-box-shadow-dark',
+					'dark:bg-[#ffffff0e]',
+					'dark:text-[#D8D8D8]',
 					'font-500',
 					'cursor-pointer',
 					'bg-white',

@@ -7,3 +7,4 @@
 - make components pretty + add more features to components
 - make buttons to add Title and lable to components
 - duplicate, delete, hide, min-max, default answer
+- make css variables so can apply custom styles
