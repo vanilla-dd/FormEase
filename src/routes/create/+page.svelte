@@ -50,7 +50,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/editorjs-drag-drop"></script>
 </svelte:head>
 <main
-	class={`${$FormBuilderData.settings.theme || 'light'} flex min-h-dvh flex-col gap-2`}
+	class={`${$FormBuilderData.settings ? $FormBuilderData.settings.theme : 'light'} flex min-h-dvh flex-col gap-2`}
 	id="main"
 >
 	<header class="px-3 py-4">

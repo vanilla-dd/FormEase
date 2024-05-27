@@ -48,7 +48,9 @@
 				class="flex h-[68px] w-20 flex-col items-center justify-center rounded-md bg-white text-xs text-[#007AFF]"
 				style="box-shadow: rgb(0, 122, 255) 0px 0px 0px 2px, rgba(61, 59, 53, 0.16) 0px 0px 0px 1px;"
 				on:click={() => {
-					$FormBuilderData.settings.theme = 'light';
+					FormBuilderData.update((curr) => {
+						return { ...curr, settings: { theme: 'light' } };
+					});
 				}}
 			>
 				<Sun class="mb-1.5 h-5 w-5" />
@@ -58,7 +60,9 @@
 				class="flex h-[68px] w-20 flex-col items-center justify-center rounded-md bg-white text-xs text-[#007AFF]"
 				style="box-shadow: rgb(0, 122, 255) 0px 0px 0px 2px, rgba(61, 59, 53, 0.16) 0px 0px 0px 1px;"
 				on:click={() => {
-					$FormBuilderData.settings.theme = 'dark';
+					FormBuilderData.update((curr) => {
+						return { ...curr, settings: { theme: 'dark' } };
+					});
 				}}
 			>
 				<Moon class="mb-1.5 h-5 w-5" />
