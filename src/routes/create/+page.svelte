@@ -68,7 +68,7 @@
 			</a>
 			<ChevronRight class="w-5 stroke-[#BBBAB8]" />
 			<p class="font-semibold text-[#777672]">
-				{$FormBuilderData.formMetaData?.title || 'Untitled'}
+				{$FormBuilderData.formMetaData.title ? $FormBuilderData.formMetaData.title : 'Untitled'}
 			</p>
 		</div>
 	</header>
@@ -99,7 +99,7 @@
 						});
 					}}
 				>
-					{$FormBuilderData.formMetaData?.title || 'Form Title'}
+					{$FormBuilderData.formMetaData.title ? $FormBuilderData.formMetaData.title : 'Form Title'}
 				</h1>
 				<img
 					src={$FormBuilderData.formMetaData.logo || ''}
