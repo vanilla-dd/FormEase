@@ -76,10 +76,10 @@
 		class="mt-8 grid w-full place-items-center pb-10 text-[#37352f] dark:bg-[#191919] dark:text-[#5A5A5A]"
 	>
 		<FormCover {logoImg} />
-		<div class="mt-12 flex w-full max-w-[700px] flex-col items-stretch px-4">
+		<div class="mt-12 flex w-full max-w-[750px] flex-col items-stretch px-4">
 			<div class="relative">
 				<h1
-					class="place-self-start whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none caret-black outline-none md:pl-2 dark:caret-white"
+					class="place-self-start whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none caret-current outline-none md:pl-2"
 					contenteditable="true"
 					on:keydown={(e) => {
 						if (e.key === 'Enter') {
@@ -88,6 +88,7 @@
 						}
 					}}
 					on:input={(e) => {
+						e.currentTarget.classList.add('dark:text-[#d8d8d8]');
 						FormBuilderData.update((curr) => {
 							return {
 								...curr,
@@ -108,7 +109,7 @@
 					bind:this={logoImg}
 				/>
 			</div>
-			<div id="editorjs" class="min-h-[300px]" />
+			<div id="editorjs" class="min-h-[300px] md:mr-11" />
 			<div class="md:pl-2">
 				<button
 					class="flex items-center gap-1 self-start rounded-md bg-black px-4 py-2 font-bold text-white dark:bg-[#7957FF] dark:text-white"

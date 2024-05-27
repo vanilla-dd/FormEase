@@ -42,7 +42,7 @@ export class Link {
 	  `;
 		svg.classList.add('absolute', 'right-2', 'top-1/2', '-translate-y-1/2');
 
-		wrapper.classList.add('inputWrapper', 'w-1/2');
+		wrapper.classList.add('inputWrapper', 'wrapperMobile');
 
 		block.classList.add('inputBlock');
 

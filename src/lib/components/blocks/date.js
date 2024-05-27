@@ -80,7 +80,7 @@ export class DateBlock {
 			'relative',
 			'cursor-text',
 			'custom-box-shadow',
-			'w-1/2',
+			'wrapperMobile',
 			'rounded-md',
 			'px-2',
 			'py-1.5',
