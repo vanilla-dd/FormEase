@@ -12,6 +12,7 @@
 	import { ArrowRight, ChevronRight } from 'lucide-svelte';
 	import FormCover from '$lib/components/FormCover.svelte';
 	let editor: any;
+	let logoImg: HTMLImageElement;
 	const StoredFormBuilderData = get(FormBuilderData);
 	onMount(async () => {
 		const EditorJs = (await import('@editorjs/editorjs')).default;
@@ -49,7 +50,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/editorjs-drag-drop"></script>
 </svelte:head>
 <main
-	class={`${$FormBuilderData.settings.theme ?? 'light'} flex min-h-dvh flex-col gap-2`}
+	class={`${$FormBuilderData.settings.theme || 'light'} flex min-h-dvh flex-col gap-2`}
 	id="main"
 >
 	<header class="px-3 py-4">
@@ -74,31 +75,39 @@
 	<div
 		class="mt-8 grid w-full place-items-center pb-10 text-[#37352f] dark:bg-[#191919] dark:text-[#5A5A5A]"
 	>
-		<FormCover />
+		<FormCover {logoImg} />
 		<div class="mt-12 flex w-full max-w-[700px] flex-col items-stretch px-4">
-			<h1
-				class="place-self-start whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none caret-black outline-none md:pl-2 dark:caret-white"
-				contenteditable="true"
-				on:keydown={(e) => {
-					if (e.key === 'Enter') {
-						e.preventDefault();
-						editor.focus();
-					}
-				}}
-				on:input={(e) => {
-					FormBuilderData.update((curr) => {
-						return {
-							...curr,
-							formMetaData: {
-								...curr.formMetaData,
-								title: e.currentTarget.innerText
-							}
-						};
-					});
-				}}
-			>
-				{$FormBuilderData.formMetaData?.title || 'Form Title'}
-			</h1>
+			<div class="relative">
+				<h1
+					class="place-self-start whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none caret-black outline-none md:pl-2 dark:caret-white"
+					contenteditable="true"
+					on:keydown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							editor.focus();
+						}
+					}}
+					on:input={(e) => {
+						FormBuilderData.update((curr) => {
+							return {
+								...curr,
+								formMetaData: {
+									...curr.formMetaData,
+									title: e.currentTarget.innerText
+								}
+							};
+						});
+					}}
+				>
+					{$FormBuilderData.formMetaData?.title || 'Form Title'}
+				</h1>
+				<img
+					src={$FormBuilderData.formMetaData.logo || ''}
+					alt=""
+					class="absolute -top-full w-28 -translate-y-1/3 rounded-full"
+					bind:this={logoImg}
+				/>
+			</div>
 			<div id="editorjs" class="min-h-[300px]" />
 			<div class="md:pl-2">
 				<button

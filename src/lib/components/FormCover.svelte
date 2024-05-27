@@ -4,13 +4,17 @@
 	import { Info, Moon, Sun } from 'lucide-svelte';
 
 	let coverImg: HTMLImageElement;
+	export let logoImg: HTMLImageElement;
 	let designPanelState = false;
 	const buttons = [
 		{
 			text: 'Add logo',
 			logo: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-panel-top"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><line x1="3" x2="21" y1="9" y2="9"></line></svg>`,
-			active: false,
-			action: () => {}
+			active: $FormBuilderData.formMetaData?.logo !== '' ? true : false,
+			action: () => {
+				logoImg.src = './form-logo.jpg';
+				$FormBuilderData.formMetaData.logo = './form-logo.jpg';
+			}
 		},
 		{
 			text: 'Add cover',
@@ -72,12 +76,14 @@
 <div
 	class="group/buttons relative -mt-10 flex h-[20vh] w-full items-center justify-center bg-transparent"
 >
-	<img
-		bind:this={coverImg}
-		src={$FormBuilderData.formMetaData?.cover || ''}
-		class={`${buttons[1].active ? 'block' : 'invisible'} h-full w-full border-none outline-none`}
-		alt="form-cover"
-	/>
+	<div class="relative h-full w-full">
+		<img
+			bind:this={coverImg}
+			src={$FormBuilderData.formMetaData?.cover || ''}
+			class={`${buttons[1].active ? 'block' : 'invisible'} h-full w-full border-none outline-none`}
+			alt="form-cover"
+		/>
+	</div>
 	<div
 		class="absolute -bottom-12 flex w-full justify-center gap-2 pb-1 pt-2 text-[#898884] opacity-0 focus-within:opacity-100 hover:opacity-100 group-hover/buttons:opacity-100"
 	>
