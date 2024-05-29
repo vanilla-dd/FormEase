@@ -11,6 +11,7 @@
 	import { get } from 'svelte/store';
 	import { ArrowRight, ChevronRight } from 'lucide-svelte';
 	import FormCover from '$lib/components/FormCover.svelte';
+	import { Title } from '$lib/components/blocks/Title';
 	let editor: any;
 	let logoImg: HTMLImageElement;
 	const StoredFormBuilderData = get(FormBuilderData);
@@ -20,6 +21,7 @@
 		editor = new EditorJs({
 			// autofocus: true,
 			tools: {
+				title: Title,
 				shortAnswer: ShortAnswer,
 				longAnswer: LongAnswer,
 				link: Link,
