@@ -1,4 +1,6 @@
-export class Number {
+import { createRequiredButton, createCheckbox, addEventListenersToBlock } from './blockUtils';
+
+export class NumberBlock {
 	static get toolbox() {
 		return {
 			title: 'Number',
@@ -8,117 +10,93 @@ export class Number {
 		};
 	}
 
-	constructor({ data, api }) {
+	constructor({ data, api, block }) {
 		this.data = { required: true, ...data };
 		this.api = api;
+		this.block = block;
+		this.titleBlockId = data.titleBlockId || null;
+		this.requiredButton = createRequiredButton(
+			this.data.required,
+			this.toggleRequired,
+			this.titleBlockId
+		);
+		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
+		this.updateRequiredButton();
 	}
 
 	toggleRequired = () => {
 		this.data.required = !this.data.required;
 		this.updateRequiredButton();
+		this.updateTitleBlock();
 	};
 
 	updateRequiredButton = () => {
 		if (this.requiredButton) {
-			this.requiredButton.classList.toggle('!hidden', !this.data.required);
+			this.requiredButton.style.display =
+				this.data.required && !this.titleBlockId ? 'flex' : 'none';
 		}
-		if (this.requiredToggle) {
-			this.requiredToggle.checked = this.data.required;
+	};
+
+	updateTitleBlock = () => {
+		if (this.titleBlockId) {
+			const titleBlock = this.api.blocks.getById(this.titleBlockId);
+			if (titleBlock) {
+				this.api.blocks.update(this.titleBlockId, { required: this.data.required });
+			}
 		}
 	};
 
 	renderSettings() {
 		const wrapper = document.createElement('div');
-		this.requiredToggle = this.createCheckbox('Required', this.data.required, this.toggleRequired);
+		const titleButton = document.createElement('button');
+		this.requiredToggle = createCheckbox('Required', this.data.required, this.toggleRequired);
+		titleButton.innerText = 'Add Title';
+		titleButton.addEventListener('click', this.addTitle);
+		wrapper.append(titleButton);
 		wrapper.append(this.requiredToggle.label);
 		return wrapper;
 	}
+
+	addTitle = () => {
+		if (this.titleBlockId) {
+			alert('A Title block already exists for this Short Answer block.');
+			return;
+		}
+		const titleBlock = this.api.blocks.insert(
+			'title',
+			{ required: this.data.required, parentId: this.block.id },
+			{},
+			this.api.blocks.getCurrentBlockIndex()
+		);
+		this.titleBlockId = titleBlock.id;
+		this.updateRequiredButton();
+	};
 
 	render() {
 		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
 		const svg = document.createElement('div');
-		block.innerHTML = this.data.placeholder ?? '';
-		const updatePlaceholder = () => {
-			if (block.innerText.trim() === '') {
-				block.classList.add("before:focus:content-['Type_placeholder_text']");
-			} else {
-				block.classList.remove("before:focus:content-['Type_placeholder_text']");
-			}
-		};
 
-		updatePlaceholder();
-
-		block.addEventListener('input', updatePlaceholder);
-		block.setAttribute('contenteditable', 'true');
-		svg.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hash"><line x1="4" x2="20" y1="9" y2="9"></line><line x1="4" x2="20" y1="15" y2="15"></line><line x1="10" x2="8" y1="3" y2="21"></line><line x1="16" x2="14" y1="3" y2="21"></line></svg>
-	  `;
+		svg.innerHTML = NumberBlock.toolbox.icon;
 		svg.classList.add('absolute', 'right-2', 'top-1/2', '-translate-y-1/2');
+
+		block.innerText = this.data.placeholder ?? '';
+		block.classList.add('inputBlock');
+		block.setAttribute('contentEditable', 'true');
+		addEventListenersToBlock(block, this.api);
 
 		wrapper.classList.add('inputWrapper', 'wrapperMobile');
 
-		updatePlaceholder();
-
-		block.addEventListener('input', updatePlaceholder);
-
-		this.requiredButton = this.createRequiredButton();
-		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
-		this.updateRequiredButton();
-
-		this.api.listeners.on(
-			block,
-			'keydown',
-			(e) => {
-				if (e.key !== 'Backspace') return;
-				if (e.key === 'Backspace' && e.currentTarget.innerText === '') {
-					this.api.blocks.delete();
-				}
-			},
-			false
-		);
-		block.classList.add('inputBlock');
-		this.api.listeners.on(
-			block,
-			'keydown',
-			(e) => {
-				if (e.key !== 'Enter') return;
-				this.api.blocks.insert();
-			},
-			false
-		);
-
-		wrapper.append(svg, block, this.requiredButton);
-
+		wrapper.append(block, svg, this.requiredButton);
 		return wrapper;
-	}
-
-	createRequiredButton = () => {
-		const button = document.createElement('button');
-		button.innerText = '*';
-		button.classList.add('requiredButton');
-		return button;
-	};
-
-	createCheckbox(labelText, checked, onChange) {
-		const input = document.createElement('input');
-		input.type = 'checkbox';
-		input.checked = checked;
-		input.addEventListener('change', onChange);
-
-		const label = document.createElement('label');
-		label.innerText = labelText;
-		label.classList.add('cdx-settings-button');
-		label.append(input);
-
-		return { label, input };
 	}
 
 	save(blockContent) {
 		const block = blockContent.querySelector('div[contenteditable="true"]');
 		return {
 			placeholder: block ? block.innerText.trim() : '',
-			required: this.data.required ?? true
+			required: this.data.required,
+			titleBlockId: this.titleBlockId
 		};
 	}
 }

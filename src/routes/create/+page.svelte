@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { ShortAnswer } from '$lib/components/blocks/shortAnswer';
-	import { LongAnswer } from '$lib/components/blocks/longAnswer';
-	import { Link } from '$lib/components/blocks/link';
+	import { ShortAnswerBlock } from '$lib/components/blocks/shortAnswer';
+	import { LongAnswerBlock } from '$lib/components/blocks/longAnswer';
+	import { LinkBlock } from '$lib/components/blocks/link';
 	import { DateBlock } from '$lib/components/blocks/date';
-	import { Rating } from '$lib/components/blocks/rating';
-	import { Number } from '$lib/components/blocks/number';
+	import { RatingBlock } from '$lib/components/blocks/rating';
+	import { NumberBlock } from '$lib/components/blocks/number';
 	import { LinearRatingBlock } from '$lib/components/blocks/linearRating';
 	import { FormBuilderData } from '$lib/localStorage';
 	import { get } from 'svelte/store';
@@ -22,12 +22,12 @@
 			// autofocus: true,
 			tools: {
 				title: Title,
-				shortAnswer: ShortAnswer,
-				longAnswer: LongAnswer,
-				link: Link,
-				number: Number,
+				shortAnswer: ShortAnswerBlock,
+				longAnswer: LongAnswerBlock,
+				link: LinkBlock,
+				number: NumberBlock,
 				date: DateBlock,
-				rating: Rating,
+				rating: RatingBlock,
 				linearRating: LinearRatingBlock
 			},
 			inlineToolbar: true,
@@ -81,7 +81,7 @@
 		<div class="mt-12 flex w-full max-w-[750px] flex-col items-stretch px-4">
 			<div class="relative">
 				<h1
-					class="place-self-start whitespace-pre-wrap break-words pb-10 text-[40px] font-extrabold leading-none caret-current outline-none md:pl-2"
+					class="place-self-start whitespace-pre-wrap break-words pb-12 text-[40px] font-extrabold leading-none caret-current outline-none md:pl-3"
 					contenteditable="true"
 					on:keydown={(e) => {
 						if (e.key === 'Enter') {

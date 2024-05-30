@@ -13,12 +13,16 @@ Make form within minutes...
 - [ ] **Form Publish**
 - [ ] **Form Manage**
 - [ ] **Form Response Export + Dasboard with charts**
-- [ ] **Title for form elements**
+- [x] **Title for form elements**
+  - [ ] **Automatically link to next element**
+  - [ ] **Enhance quality**
 - [ ] **Label for form elements**
 - [x] **Required button**
 - [x] **Drag and drop form elements**
 - [x] **Dark-Light form theme**
 - [x] **Form Logo + Cover**
+- [ ] **Shift classes to ts**
+- [ ] **Make a super class for forms blocks**
 - [ ] **Custom Form Logo + Cover**
 - [ ] **Responsive Design**
 - [ ] **Decouple Required button**
@@ -33,8 +37,10 @@ Make form within minutes...
 - [ ] **Form embed**
 - [ ] **Prebuilt Questions**
 - [ ] **Prebuilt Templates?**
-- [ ] **Stripe Integration?**
+- [ ] **Integrations?**
+  - [ ] **Stripe Integration?**
+  - [ ] **Webhooks?**
 
-## Clone of
+## Clone of check em out
 
 - [Tally Forms](https://tally.so)

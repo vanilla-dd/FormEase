@@ -1,10 +1,10 @@
+import { createRequiredButton, addEventListenersToBlock } from './blockUtils';
 export class Title {
 	constructor({ data, api, block }) {
 		this.parentId = data.parentId;
 		this.data = data;
 		this.api = api;
 		this.block = block;
-		console.log(this.api.toolbar);
 	}
 
 	renderSettings() {
@@ -28,38 +28,33 @@ export class Title {
 		block.setAttribute('contentEditable', 'true');
 		wrapper.classList.add('pb-2.5', 'relative', 'w-full', 'max-w-80');
 
-		const updatePlaceholder = () => {
-			block.classList.toggle(
-				"before:content-['Type_placeholder_text']",
-				block.innerText.trim() === '' && block.innerText.length === 0
-			);
-		};
-
-		updatePlaceholder();
-		block.addEventListener('input', updatePlaceholder);
-
-		const requiredButton = this.createRequiredButton();
-		this.api.listeners.on(block, 'keydown', (e) => {
-			if (e.key === 'Backspace' && block.innerText === '') {
-				this.api.blocks.delete();
-			} else if (e.key === 'Enter') {
-				this.api.blocks.insert();
-			}
-		});
-
+		addEventListenersToBlock(block, this.api);
+		this.Button = createRequiredButton(this.data.required, this.toggleRequired);
 		block.innerText = this.data.placeholder ?? '';
 
-		wrapper.append(block, requiredButton);
+		wrapper.append(block, this.Button);
 
 		return wrapper;
 	}
 
-	createRequiredButton = () => {
-		const button = document.createElement('button');
-		button.style.display = this.data.required ? 'flex' : 'none';
-		button.innerText = '*';
-		button.classList.add('requiredButton');
-		return button;
+	toggleRequired = () => {
+		this.data.required = !this.data.required;
+		this.updateRequiredButton();
+		this.updateBlockRequiredState();
+	};
+
+	updateRequiredButton = () => {
+		if (this.Button) {
+			this.Button.style.display = this.data.required ? 'flex' : 'none';
+		}
+	};
+
+	updateBlockRequiredState = () => {
+		if (this.parentId) {
+			this.api.blocks.update(this.parentId, {
+				required: this.data.required
+			});
+		}
 	};
 
 	save(blockContent) {

@@ -1,115 +1,98 @@
-export class Link {
+import { createRequiredButton, createCheckbox, addEventListenersToBlock } from './blockUtils';
+
+export class LinkBlock {
 	static get toolbox() {
 		return {
 			title: 'Link',
-			icon: `
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>   
-		`
+			icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`
 		};
 	}
 
-	constructor({ data, api }) {
-		this.data = data;
+	constructor({ data, api, block }) {
+		this.data = { required: true, ...data };
 		this.api = api;
+		this.block = block;
+		this.titleBlockId = data.titleBlockId || null;
+		this.requiredButton = createRequiredButton(
+			this.data.required,
+			this.toggleRequired,
+			this.titleBlockId
+		);
+		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
+		this.updateRequiredButton();
 	}
+
 	toggleRequired = () => {
 		this.data.required = !this.data.required;
 		this.updateRequiredButton();
+		this.updateTitleBlock();
 	};
 
 	updateRequiredButton = () => {
 		if (this.requiredButton) {
-			this.requiredButton.classList.toggle('!hidden', !this.data.required);
+			this.requiredButton.style.display =
+				this.data.required && !this.titleBlockId ? 'flex' : 'none';
 		}
-		if (this.requiredToggle) {
-			this.requiredToggle.checked = this.data.required;
+	};
+
+	updateTitleBlock = () => {
+		if (this.titleBlockId) {
+			const titleBlock = this.api.blocks.getById(this.titleBlockId);
+			if (titleBlock) {
+				this.api.blocks.update(this.titleBlockId, { required: this.data.required });
+			}
 		}
 	};
 
 	renderSettings() {
 		const wrapper = document.createElement('div');
-		this.requiredToggle = this.createCheckbox('Required', this.data.required, this.toggleRequired);
+		const titleButton = document.createElement('button');
+		this.requiredToggle = createCheckbox('Required', this.data.required, this.toggleRequired);
+		titleButton.innerText = 'Add Title';
+		titleButton.addEventListener('click', this.addTitle);
+		wrapper.append(titleButton);
 		wrapper.append(this.requiredToggle.label);
 		return wrapper;
 	}
+
+	addTitle = () => {
+		if (this.titleBlockId) {
+			alert('A Title block already exists for this Short Answer block.');
+			return;
+		}
+		const titleBlock = this.api.blocks.insert(
+			'title',
+			{ required: this.data.required, parentId: this.block.id },
+			{},
+			this.api.blocks.getCurrentBlockIndex()
+		);
+		this.titleBlockId = titleBlock.id;
+		this.updateRequiredButton();
+	};
+
 	render() {
 		const wrapper = document.createElement('div');
 		const block = document.createElement('div');
 		const svg = document.createElement('div');
-		block.innerText = this.data.placeholder ?? '';
-		svg.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-	  `;
+		svg.innerHTML = LinkBlock.toolbox.icon;
 		svg.classList.add('absolute', 'right-2', 'top-1/2', '-translate-y-1/2');
 
-		wrapper.classList.add('inputWrapper', 'wrapperMobile');
-
+		block.innerText = this.data.placeholder ?? '';
 		block.classList.add('inputBlock');
-
 		block.setAttribute('contentEditable', 'true');
-		const updatePlaceholder = () => {
-			if (block.innerText.trim() === '') {
-				block.classList.add("before:focus:content-['Type_placeholder_text']");
-			} else {
-				block.classList.remove("before:focus:content-['Type_placeholder_text']");
-			}
-		};
+		addEventListenersToBlock(block, this.api);
 
-		updatePlaceholder();
-
-		block.addEventListener('input', updatePlaceholder);
-
-		this.api.listeners.on(
-			block,
-			'keydown',
-			(e) => {
-				if (e.key !== 'Backspace') return;
-				if (e.key === 'Backspace' && e.currentTarget.innerText === '') {
-					this.api.blocks.delete();
-				}
-			},
-			false
-		);
-		this.api.listeners.on(
-			block,
-			'keydown',
-			(e) => {
-				if (e.key !== 'Enter') return;
-				this.api.blocks.insert();
-			},
-			false
-		);
-		this.requiredButton = this.createRequiredButton();
-		this.api.listeners.on(this.requiredButton, 'click', this.toggleRequired);
-		this.updateRequiredButton();
+		wrapper.classList.add('inputWrapper', 'wrapperMobile');
 		wrapper.append(svg, block, this.requiredButton);
-
 		return wrapper;
 	}
-	createRequiredButton = () => {
-		const button = document.createElement('button');
-		button.innerText = '*';
-		button.classList.add('requiredButton');
-		return button;
-	};
-	createCheckbox(labelText, checked, onChange) {
-		const input = document.createElement('input');
-		input.type = 'checkbox';
-		input.checked = checked;
-		input.addEventListener('change', onChange);
 
-		const label = document.createElement('label');
-		label.innerText = labelText;
-		label.classList.add('cdx-settings-button');
-		label.append(input);
-
-		return { label, input };
-	}
 	save(blockContent) {
 		const block = blockContent.querySelector('div[contenteditable="true"]');
 		return {
 			placeholder: block ? block.innerText.trim() : '',
-			required: this.data.required ?? true
+			required: this.data.required,
+			titleBlockId: this.titleBlockId
 		};
 	}
 }
