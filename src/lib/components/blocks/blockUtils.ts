@@ -3,7 +3,7 @@ import type { API } from '@editorjs/editorjs';
 export function createRequiredButton(
 	isRequired: boolean,
 	toggleRequired: () => void,
-	titleBlockId: string
+	titleBlockId: string | null
 ) {
 	const button = document.createElement('button');
 	button.innerText = isRequired ? '*' : '';

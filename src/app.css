@@ -47,8 +47,13 @@ body {
 	.inputBlock {
 		@apply relative h-full w-full px-1 text-[#BBBAB8] caret-black outline-none ring-0 before:absolute before:left-1 dark:text-[#5A5A5A] dark:caret-white;
 	}
+
 	.wrapperMobile {
 		@apply max-w-80;
+	}
+
+	.ratingElement {
+		@apply custom-box-shadow dark:custom-box-shadow-dark flex min-h-9 min-w-9 cursor-pointer items-center justify-center rounded-md bg-white font-medium dark:bg-[#ffffff0e] dark:text-[#D8D8D8];
 	}
 }
 

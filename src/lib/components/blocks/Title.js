@@ -21,15 +21,15 @@ export class Title {
 			'leading-tight',
 			'dark:!text-[#D8D8D8]',
 			'font-semibold',
-			"before:content-['Type_placeholder_text']",
 			'before:dark:text-[#5A5A5A]',
 			'!text-[#37352f]'
 		);
+
 		block.setAttribute('contentEditable', 'true');
 		wrapper.classList.add('pb-2.5', 'relative', 'w-full', 'max-w-80');
 
 		addEventListenersToBlock(block, this.api);
-		this.Button = createRequiredButton(this.data.required, this.toggleRequired);
+		this.Button = createRequiredButton(this.data.required, this.toggleRequired, null);
 		block.innerText = this.data.placeholder ?? '';
 
 		wrapper.append(block, this.Button);

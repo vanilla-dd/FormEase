@@ -22,7 +22,7 @@ Make form within minutes...
 - [x] **Dark-Light form theme**
 - [x] **Form Logo + Cover**
 - [ ] **Shift classes to ts**
-- [ ] **Make a super class for forms blocks**
+- [x] **Make a super class for forms blocks**
 - [ ] **Custom Form Logo + Cover**
 - [ ] **Responsive Design**
 - [ ] **Decouple Required button**
