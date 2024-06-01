@@ -4,6 +4,7 @@
 	import { Info, Moon, Sun } from 'lucide-svelte';
 
 	let coverImg: HTMLImageElement;
+	let customSettingState = false;
 	export let logoImg: HTMLImageElement;
 
 	let designPanelState = false;
@@ -50,7 +51,7 @@
 	];
 </script>
 
-<Sheet.Root open={designPanelState}>
+<Sheet.Root open={true}>
 	<Sheet.Content>
 		<Sheet.Header>
 			<Sheet.Title>Design</Sheet.Title>
@@ -61,8 +62,9 @@
 				class="flex h-[68px] w-20 flex-col items-center justify-center rounded-md bg-white text-xs text-[#007AFF]"
 				style="box-shadow: rgb(0, 122, 255) 0px 0px 0px 2px, rgba(61, 59, 53, 0.16) 0px 0px 0px 1px;"
 				on:click={() => {
+					customSettingState = false;
 					FormBuilderData.update((curr) => {
-						return { ...curr, settings: { theme: 'light' } };
+						return { ...curr, settings: { ...curr.settings, theme: 'light' } };
 					});
 				}}
 			>
@@ -73,15 +75,59 @@
 				class="flex h-[68px] w-20 flex-col items-center justify-center rounded-md bg-white text-xs text-[#007AFF]"
 				style="box-shadow: rgb(0, 122, 255) 0px 0px 0px 2px, rgba(61, 59, 53, 0.16) 0px 0px 0px 1px;"
 				on:click={() => {
+					customSettingState = false;
 					FormBuilderData.update((curr) => {
-						return { ...curr, settings: { theme: 'dark' } };
+						return { ...curr, settings: { ...curr.settings, theme: 'dark' } };
 					});
 				}}
 			>
 				<Moon class="mb-1.5 h-5 w-5" />
 				Dark</button
 			>
+			<button
+				class="flex h-[68px] w-20 flex-col items-center justify-center rounded-md bg-white text-xs text-[#007AFF]"
+				style="box-shadow: rgb(0, 122, 255) 0px 0px 0px 2px, rgba(61, 59, 53, 0.16) 0px 0px 0px 1px;"
+				on:click={() => {
+					customSettingState = true;
+					$FormBuilderData.settings.colors = $FormBuilderData.settings.colors;
+				}}
+			>
+				<Sun class="mb-1.5 h-5 w-5" />
+				Custom</button
+			>
 		</div>
+
+		{#if true}
+			<div class="mt-8 flex items-center justify-center text-xs text-[#777672]">
+				<div class="flex-1">Background</div>
+				<div class="custom-box-shadow flex h-9 flex-1 gap-3 rounded">
+					<div
+						style="background-color: {$FormBuilderData.settings.colors.background};"
+						class="relative left-1.5 top-1/2 h-full max-h-6 w-full max-w-6 -translate-y-1/2 rounded border-2 border-[#37352f17]"
+					></div>
+					<input
+						type="text"
+						value={$FormBuilderData.settings.colors.background}
+						class="h-full w-full appearance-none border-0 bg-transparent text-base text-[#37352f] outline-none ring-0"
+						on:input={(e) => {
+							console.log(e.currentTarget.innerText);
+							FormBuilderData.update((curr) => {
+								return {
+									...curr,
+									settings: {
+										...curr.settings,
+										colors: {
+											...curr.settings.colors,
+											background: e.currentTarget.value
+										}
+									}
+								};
+							});
+						}}
+					/>
+				</div>
+			</div>
+		{/if}
 		<Sheet.Footer>
 			<Sheet.Description class="flex gap-2">
 				<Info class="stroke-blue-500" /> This is still work in progress more options will be added soon...

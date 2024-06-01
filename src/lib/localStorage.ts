@@ -2,7 +2,16 @@ import type { OutputData } from '@editorjs/editorjs';
 import { persisted } from 'svelte-persisted-store';
 
 export const FormBuilderData = persisted('FormBuilderData', {
-	settings: { theme: 'light' },
+	settings: {
+		theme: '',
+		colors: {
+			accent: '#007aff',
+			background: '#FFFFFF',
+			buttonBackground: '#000000',
+			buttonText: '#FFFFFF',
+			text: '#37352f'
+		}
+	},
 	formMetaData: {
 		title: '',
 		cover: '',
