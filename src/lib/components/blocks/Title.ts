@@ -1,6 +1,13 @@
+import type { API, BlockAPI, BlockToolData } from '@editorjs/editorjs';
 import { createRequiredButton, addEventListenersToBlock } from './blockUtils';
 export class Title {
-	constructor({ data, api, block }) {
+	protected data: BlockToolData;
+	protected api: API;
+	protected block: BlockAPI;
+	protected parentId: string;
+	protected Button: HTMLElement | null = null; // Added Button property declaration
+
+	constructor({ data, api, block }: { data: BlockToolData; api: API; block: BlockAPI }) {
 		this.parentId = data.parentId;
 		this.data = data;
 		this.api = api;
@@ -57,8 +64,8 @@ export class Title {
 		}
 	};
 
-	save(blockContent) {
-		const block = blockContent.querySelector('div[contenteditable="true"]');
+	save(blockContent: HTMLElement) {
+		const block: HTMLDivElement | null = blockContent.querySelector('div[contenteditable="true"]');
 		return {
 			placeholder: block ? block.innerText.trim() : '',
 			parentId: this.parentId,

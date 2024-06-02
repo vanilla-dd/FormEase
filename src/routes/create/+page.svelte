@@ -1,17 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { ShortAnswerBlock } from '$lib/components/blocks/shortAnswer';
-	import { LongAnswerBlock } from '$lib/components/blocks/longAnswer';
-	import { LinkBlock } from '$lib/components/blocks/link';
-	import { DateBlock } from '$lib/components/blocks/date';
-	import { RatingBlock } from '$lib/components/blocks/rating';
-	import { NumberBlock } from '$lib/components/blocks/number';
-	import { LinearRatingBlock } from '$lib/components/blocks/linearRating';
+
 	import { FormBuilderData } from '$lib/localStorage';
 	import { get } from 'svelte/store';
 	import { ArrowRight, ChevronRight } from 'lucide-svelte';
 	import FormCover from '$lib/components/FormCover.svelte';
-	import { Title } from '$lib/components/blocks/Title';
+	import {
+		DateBlock,
+		LinearRatingBlock,
+		LinkBlock,
+		LongAnswerBlock,
+		NumberBlock,
+		RatingBlock,
+		ShortAnswerBlock,
+		Title
+	} from '$lib/components/blocks/index';
+
 	let editor: any;
 	let logoImg: HTMLImageElement;
 	const StoredFormBuilderData = get(FormBuilderData);
@@ -21,6 +25,7 @@
 		editor = new EditorJs({
 			// autofocus: true,
 			tools: {
+				// @ts-ignore
 				title: Title,
 				shortAnswer: ShortAnswerBlock,
 				longAnswer: LongAnswerBlock,

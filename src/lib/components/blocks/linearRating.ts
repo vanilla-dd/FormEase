@@ -1,6 +1,11 @@
+// /src/LinearRatingBlock.ts
+import type { API, BlockAPI, BlockToolData } from '@editorjs/editorjs';
 import { BaseBlock } from './baseBlock';
 
 export class LinearRatingBlock extends BaseBlock {
+	protected wrapper: HTMLElement;
+	protected data: BlockToolData;
+
 	static get toolbox() {
 		return {
 			title: 'Linear Rating',
@@ -8,28 +13,32 @@ export class LinearRatingBlock extends BaseBlock {
 		};
 	}
 
-	constructor({ data, api, block }) {
+	constructor({ data, api, block }: { data: BlockToolData; api: API; block: BlockAPI }) {
 		super({ data, api, block });
 		this.data = { required: true, starting: 1, end: 10, ...data };
 		this.wrapper = document.createElement('div');
 		this.updateRatingRange();
 	}
 
-	renderSettings = () => {
-		const wrapper = super.renderSettings();
-		const startingInput = this.createNumberInput('Start: ', this.data.starting, (value) => {
-			this.data.starting = value;
-			this.updateRatingRange();
-		});
-		const endingInput = this.createNumberInput('End: ', this.data.end, (value) => {
+	renderSettings(): HTMLElement {
+		const wrapper = super.renderSettings() as HTMLElement;
+		const startingInput = this.createNumberInput(
+			'Start: ',
+			this.data.starting!,
+			(value: number) => {
+				this.data.starting = value;
+				this.updateRatingRange();
+			}
+		);
+		const endingInput = this.createNumberInput('End: ', this.data.end!, (value: number) => {
 			this.data.end = value;
 			this.updateRatingRange();
 		});
 		wrapper.append(startingInput.label, endingInput.label);
 		return wrapper;
-	};
+	}
 
-	render() {
+	render(): HTMLElement {
 		const container = document.createElement('div');
 		this.updateRatingRange();
 		container.append(this.requiredButton, this.wrapper);
@@ -37,10 +46,10 @@ export class LinearRatingBlock extends BaseBlock {
 		return container;
 	}
 
-	updateRatingRange = () => {
+	private updateRatingRange(): void {
 		if (this.wrapper) {
 			this.wrapper.innerHTML = '';
-			for (let index = this.data.starting; index <= this.data.end; index++) {
+			for (let index = this.data.starting!; index <= this.data.end!; index++) {
 				const ratingElement = document.createElement('div');
 				ratingElement.innerText = `${index}`;
 				ratingElement.classList.add('ratingElement');
@@ -48,14 +57,18 @@ export class LinearRatingBlock extends BaseBlock {
 			}
 			this.wrapper.classList.add('flex', 'gap-2', 'rounded-md', 'flex-wrap');
 		}
-	};
+	}
 
-	createNumberInput(labelText, value, onChange) {
+	private createNumberInput(
+		labelText: string,
+		value: number,
+		onChange: (value: number) => void
+	): { label: HTMLElement; input: HTMLInputElement } {
 		const input = document.createElement('input');
 		input.type = 'number';
 		input.value = value.toString();
-		input.addEventListener('input', (e) => {
-			const newValue = parseInt(e.target.value, 10);
+		input.addEventListener('input', (e: Event) => {
+			const newValue = parseInt((e.currentTarget as HTMLInputElement).value, 10);
 			onChange(isNaN(newValue) ? value : newValue);
 		});
 		const label = document.createElement('label');

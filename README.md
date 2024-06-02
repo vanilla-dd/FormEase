@@ -21,12 +21,12 @@ Make form within minutes...
 - [x] **Drag and drop form elements**
 - [x] **Dark-Light form theme**
 - [x] **Form Logo + Cover**
-- [ ] **Shift classes to ts**
+- [x] **Shift classes to ts**
 - [x] **Make a super class for forms blocks**
 - [ ] **Custom Form Logo + Cover**
 - [ ] **Responsive Design**
 - [ ] **Decouple Required button**
-- [ ] **Refactor the classes for better readability**
+- [x] **Refactor the classes for better readability**
 - [ ] **Refactor components**
 - [ ] **Make `settingRender` pretty**
 - [ ] **Add more components**

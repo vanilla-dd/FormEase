@@ -24,8 +24,8 @@ export class LongAnswerBlock extends BaseBlock {
 		return wrapper;
 	}
 
-	save(blockContent) {
-		const block = blockContent.querySelector('div[contenteditable="true"]');
+	save(blockContent: HTMLElement) {
+		const block: HTMLDivElement | null = blockContent.querySelector('div[contenteditable="true"]');
 		return {
 			placeholder: block ? block.innerText.trim() : '',
 			required: this.data.required,

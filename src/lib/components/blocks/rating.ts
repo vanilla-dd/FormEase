@@ -50,21 +50,21 @@ export class RatingBlock extends BaseBlock {
 		return wrapper;
 	}
 
-	highlightStars(block, index) {
+	highlightStars(block: HTMLElement, index: number) {
 		const stars = block.children;
 		for (let i = 0; i <= index; i++) {
 			stars[i].classList.add('fill-[#FFBE01]', '!stroke-[#FFBE01]');
 		}
 	}
 
-	resetStars(block) {
+	resetStars(block: HTMLElement) {
 		const stars = block.children;
 		for (const star of stars) {
 			star.classList.remove('fill-[#FFBE01]', '!stroke-[#FFBE01]');
 		}
 	}
 
-	save(blockContent) {
+	save() {
 		return {
 			required: this.data.required,
 			titleBlockId: this.titleBlockId

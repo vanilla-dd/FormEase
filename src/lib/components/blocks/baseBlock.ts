@@ -1,7 +1,15 @@
+// /src/BaseBlock.ts
+import type { API, BlockAPI, BlockToolData } from '@editorjs/editorjs';
 import { createRequiredButton, createCheckbox } from './blockUtils';
 
 export class BaseBlock {
-	constructor({ data, api, block }) {
+	protected data: BlockToolData;
+	protected api: API;
+	protected block: BlockAPI;
+	protected titleBlockId: string | null;
+	protected requiredButton: HTMLElement;
+
+	constructor({ data, api, block }: { data: BlockToolData; api: API; block: BlockAPI }) {
 		this.data = { required: true, ...data };
 		this.api = api;
 		this.block = block;
@@ -15,20 +23,20 @@ export class BaseBlock {
 		this.updateRequiredButton();
 	}
 
-	toggleRequired = () => {
+	private toggleRequired = (): void => {
 		this.data.required = !this.data.required;
 		this.updateRequiredButton();
 		this.updateTitleBlock();
 	};
 
-	updateRequiredButton = () => {
+	private updateRequiredButton = (): void => {
 		if (this.requiredButton) {
 			this.requiredButton.style.display =
 				this.data.required && !this.titleBlockId ? 'flex' : 'none';
 		}
 	};
 
-	updateTitleBlock = () => {
+	private updateTitleBlock = (): void => {
 		if (this.titleBlockId) {
 			const titleBlock = this.api.blocks.getById(this.titleBlockId);
 			if (titleBlock) {
@@ -37,7 +45,7 @@ export class BaseBlock {
 		}
 	};
 
-	renderSettings() {
+	public renderSettings(): HTMLElement {
 		const wrapper = document.createElement('div');
 		const requiredToggle = createCheckbox('Required', this.data.required, this.toggleRequired);
 		const titleButton = document.createElement('button');
@@ -47,7 +55,7 @@ export class BaseBlock {
 		return wrapper;
 	}
 
-	addTitle = () => {
+	private addTitle = (): void => {
 		if (this.titleBlockId) {
 			alert('A Title block already exists for this block.');
 			return;
