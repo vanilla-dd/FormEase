@@ -5,11 +5,11 @@ export const FormBuilderData = persisted('FormBuilderData', {
 	settings: {
 		theme: '',
 		colors: {
-			accent: '#007aff',
-			background: '#FFFFFF',
-			buttonBackground: '#000000',
-			buttonText: '#FFFFFF',
-			text: '#37352f'
+			accent: '',
+			background: '',
+			buttonBackground: '',
+			buttonText: '',
+			text: ''
 		}
 	},
 	formMetaData: {
