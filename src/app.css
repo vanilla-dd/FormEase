@@ -55,6 +55,15 @@ body {
 	.ratingElement {
 		@apply custom-box-shadow dark:custom-box-shadow-dark flex min-h-9 min-w-9 cursor-pointer items-center justify-center rounded-md bg-white font-medium dark:bg-[#ffffff0e] dark:text-[#D8D8D8];
 	}
+	/* Hide scrollbar for Chrome, Safari and Opera */
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+	/* Hide scrollbar for IE, Edge and Firefox */
+	.no-scrollbar {
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
+	}
 }
 
 .codex-editor__redactor {
@@ -71,7 +80,7 @@ body {
 }
 
 .ce-popover {
-	@apply dark:border-white/10 dark:bg-[#262626];
+	@apply no-scrollbar dark:border-white/10 dark:bg-[#262626];
 }
 
 .ce-popover-item {

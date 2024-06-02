@@ -52,10 +52,10 @@
 	<script src="https://cdn.jsdelivr.net/npm/editorjs-drag-drop"></script>
 </svelte:head>
 <main
-	class={`${$FormBuilderData.settings ? $FormBuilderData.settings.theme : 'light'} flex min-h-dvh flex-col gap-2`}
+	class={`${$FormBuilderData.settings ? $FormBuilderData.settings.theme : 'light'} flex min-h-dvh flex-col`}
 	id="main"
 >
-	<header class="px-3 py-4">
+	<header class="px-3 py-2">
 		<div class="flex items-center gap-1">
 			<a href="/" class="group rounded-md p-1.5 transition-colors hover:bg-[#37352f17]">
 				<svg
@@ -75,7 +75,12 @@
 		</div>
 	</header>
 	<div
-		class="mt-8 grid w-full place-items-center pb-10 text-[#37352f] dark:bg-[#191919] dark:text-[#5A5A5A]"
+		class="grid w-full flex-1 place-items-center pb-10 text-[#37352f] dark:bg-[#191919] dark:text-[#5A5A5A]"
+		style="color:{$FormBuilderData.settings.theme === 'custom'
+			? $FormBuilderData.settings.colors?.text
+			: ''};background-color: {$FormBuilderData.settings.theme === 'custom'
+			? $FormBuilderData.settings.colors?.background
+			: ''};"
 	>
 		<FormCover {logoImg} />
 		<div class="mt-12 flex w-full max-w-[750px] flex-col items-stretch px-4">
@@ -114,6 +119,11 @@
 			<div id="editorjs" class="min-h-[300px] md:mr-11" />
 			<div class="md:pl-2">
 				<button
+					style="background-color: {$FormBuilderData.settings.theme === 'custom'
+						? $FormBuilderData.settings.colors?.buttonBackground
+						: ''};color:{$FormBuilderData.settings?.theme === 'custom'
+						? $FormBuilderData.settings.colors?.buttonText
+						: ''}"
 					class="flex items-center gap-1 self-start rounded-md bg-black px-4 py-2 font-bold text-white dark:bg-[#7957FF] dark:text-white"
 					>Submit <ArrowRight class="h-4 w-4 stroke-2" /></button
 				>

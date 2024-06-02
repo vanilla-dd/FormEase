@@ -33,7 +33,8 @@ Make form within minutes...
 - [ ] **Make components pretty + add more features to components**
 - [ ] **Make buttons to add Title and label to components**
 - [ ] **Duplicate, delete, hide, min-max, default answer functionality**
-- [ ] **Make CSS variables to apply custom styles**
+- [x] **Basic Custom styles**
+- [ ] **Make CSS variables to make custom styles easy**
 - [ ] **Form embed**
 - [ ] **Prebuilt Questions**
 - [ ] **Prebuilt Templates?**
