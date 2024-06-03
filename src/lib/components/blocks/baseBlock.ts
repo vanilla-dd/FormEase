@@ -69,4 +69,12 @@ export class BaseBlock {
 		this.titleBlockId = titleBlock.id;
 		this.updateRequiredButton();
 	};
+	destroy() {
+		if (this.titleBlockId) {
+			const titleBlock = this.api.blocks.getById(this.titleBlockId);
+			if (titleBlock) {
+				this.api.blocks.update(this.titleBlockId, { parentId: null });
+			}
+		}
+	}
 }

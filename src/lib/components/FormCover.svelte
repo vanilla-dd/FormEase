@@ -15,11 +15,8 @@
 		{
 			text: 'Add logo',
 			logo: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-panel-top"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><line x1="3" x2="21" y1="9" y2="9"></line></svg>`,
-			active: $FormBuilderData.formMetaData
-				? $FormBuilderData.formMetaData?.logo !== ''
-					? true
-					: false
-				: false,
+			active:
+				$FormBuilderData.formMetaData && $FormBuilderData.formMetaData?.logo !== '' ? true : false,
 			action: () => {
 				logoImg.src = './form-logo.jpg';
 				FormBuilderData.update((curr) => {
@@ -30,11 +27,8 @@
 		{
 			text: 'Add cover',
 			logo: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hexagon"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>`,
-			active: $FormBuilderData.formMetaData
-				? $FormBuilderData.formMetaData?.cover !== ''
-					? true
-					: false
-				: false,
+			active:
+				$FormBuilderData.formMetaData && $FormBuilderData.formMetaData?.cover !== '' ? true : false,
 			action: () => {
 				coverImg.src = './form-cover.jpg';
 				coverImg.style.visibility = 'visible';
@@ -55,7 +49,7 @@
 </script>
 
 <Sheet.Root open={designPanelState}>
-	<Sheet.Content class="flex flex-col p-2">
+	<Sheet.Content class="flex flex-col p-2 sm:px-4 sm:py-3">
 		<Sheet.Header>
 			<Sheet.Title>Design</Sheet.Title>
 			<Sheet.Description>Customize form apperance</Sheet.Description>

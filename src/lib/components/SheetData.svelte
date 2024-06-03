@@ -5,7 +5,7 @@
 </script>
 
 <div class="flex-1">
-	<div class="flex gap-2">
+	<div class="flex gap-2 sm:gap-3">
 		<button
 			class="custom-box-shadow flex h-[68px] w-20 flex-col items-center justify-center rounded-md bg-white text-xs"
 			style="box-shadow:{$FormBuilderData.settings.theme === 'light' ||
@@ -49,15 +49,7 @@
 						...curr,
 						settings: {
 							theme: 'custom',
-							colors: curr.settings.colors
-								? curr.settings.colors
-								: {
-										accent: '#007aff',
-										background: '#FFFFFF',
-										buttonBackground: '#000000',
-										buttonText: '#FFFFFF',
-										text: '#37352f'
-									}
+							colors: curr.settings?.colors
 						}
 					};
 				});
@@ -74,7 +66,7 @@
 				<div class="flex-1">Background</div>
 				<div class="custom-box-shadow flex h-9 flex-1 gap-3 rounded">
 					<div
-						style="background-color: {$FormBuilderData.settings.colors};"
+						style="background-color: {$FormBuilderData.settings.colors?.background};"
 						class="relative left-1.5 top-1/2 h-full max-h-6 w-full max-w-6 -translate-y-1/2 rounded border-2 border-[#37352f17]"
 					></div>
 					<input

@@ -17,6 +17,8 @@ Make form within minutes...
   - [ ] **Automatically link to next element**
   - [ ] **Enhance quality**
 - [ ] **Label for form elements**
+- [ ] **Submit button Text**
+- [x] **Tooltip on \* = required**
 - [x] **Required button**
 - [x] **Drag and drop form elements**
 - [x] **Dark-Light form theme**
