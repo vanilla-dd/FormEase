@@ -13,7 +13,8 @@
 		NumberBlock,
 		RatingBlock,
 		ShortAnswerBlock,
-		Title
+		Title,
+		CheckboxBlock
 	} from '$lib/components/blocks/index';
 
 	let editor: any;
@@ -27,6 +28,7 @@
 			tools: {
 				// @ts-ignore
 				title: Title,
+				checkbox: CheckboxBlock,
 				shortAnswer: ShortAnswerBlock,
 				longAnswer: LongAnswerBlock,
 				link: LinkBlock,
