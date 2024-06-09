@@ -23,13 +23,13 @@ export class BaseBlock {
 		this.updateRequiredButton();
 	}
 
-	private toggleRequired = (): void => {
+	protected toggleRequired = (): void => {
 		this.data.required = !this.data.required;
 		this.updateRequiredButton();
 		this.updateTitleBlock();
 	};
 
-	private updateRequiredButton = (): void => {
+	protected updateRequiredButton = (): void => {
 		if (this.requiredButton) {
 			this.requiredButton.style.display =
 				this.data.required && !this.titleBlockId ? 'flex' : 'none';

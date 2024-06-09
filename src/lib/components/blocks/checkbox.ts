@@ -1,3 +1,4 @@
+import type { API, BlockAPI, BlockToolData } from '@editorjs/editorjs';
 import { BaseBlock } from './baseBlock';
 import { addEventListenersToBlock } from './blockUtils';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,9 +11,17 @@ export class CheckboxBlock extends BaseBlock {
 		};
 	}
 
-	constructor({ data, api, block }) {
+	constructor({ data, api, block }: { data: BlockToolData; api: API; block: BlockAPI }) {
 		super({ data, api, block });
-		this.data = { required: true, text: '', first: true, last: true, groupId: uuidv4(), ...data };
+		this.data = {
+			required: true,
+			text: '',
+			first: true,
+			last: true,
+			groupId: uuidv4(),
+			index: 0,
+			...data
+		};
 	}
 
 	renderSettings() {
@@ -21,24 +30,38 @@ export class CheckboxBlock extends BaseBlock {
 
 	render() {
 		const wrapper = document.createElement('div');
-		wrapper.classList.add('flex', 'flex-col', 'gap-2', 'w-1/4', 'relative');
-
+		const blockWrapper = document.createElement('div');
+		wrapper.classList.add('flex', 'flex-col', 'gap-2', 'w-1/4', 'relative', 'pb-4');
+		blockWrapper.classList.add('flex', 'gap-2');
 		const block = document.createElement('div');
-		block.classList.add('inputBlock', 'border');
+		const checkboxDiv = document.createElement('div');
+		checkboxDiv.classList.add('w-6', 'h-6', 'border', 'rounded-md', 'custom-box-shadow');
+		block.setAttribute('data-index', this.data.index + 1);
+		block.classList.add(
+			'inputBlock',
+			`before:content-["Option_"attr(data-index)]`,
+			'before:inset-0',
+			'before:absolute',
+			'relative'
+		);
 		block.setAttribute('contentEditable', 'true');
-		block.innerText = this.data.text;
+		blockWrapper.append(checkboxDiv, block);
 		addEventListenersToBlock(block, this.api);
 
-		wrapper.append(block);
+		wrapper.append(blockWrapper);
 
 		if (this.data.last) {
+			const fadedBlockWrapper = document.createElement('div');
 			const fadedBlock = document.createElement('div');
-			fadedBlock.classList.add('inputBlock', 'border', 'opacity-50');
-			fadedBlock.setAttribute('contentEditable', 'true');
-			fadedBlock.innerText = 'Click to add another option...';
-			fadedBlock.addEventListener('click', this.addNewOption.bind(this));
+			const fcheckboxDiv = document.createElement('div');
+			fcheckboxDiv.classList.add('w-6', 'border', 'rounded-md', 'custom-box-shadow');
+			fadedBlock.classList.add('inputBlock', 'opacity-50', '-ml-1');
+			fadedBlock.innerText = `Option ${this.data.index + 2}`;
+			fadedBlockWrapper.addEventListener('click', this.addNewOption.bind(this));
+			fadedBlockWrapper.append(fcheckboxDiv, fadedBlock);
+			fadedBlockWrapper.classList.add('flex', 'gap-2', 'pt-1', 'hover:cursor-pointer');
 
-			wrapper.append(fadedBlock);
+			wrapper.append(fadedBlockWrapper);
 		}
 
 		if (this.data.first) {
@@ -61,27 +84,30 @@ export class CheckboxBlock extends BaseBlock {
 				text: '',
 				first: false,
 				last: true,
-				groupId: this.data.groupId
+				groupId: this.data.groupId,
+				index: currentIndex + 1
 			},
 			{},
 			currentIndex + 1
 		);
 	}
 
-	toggleRequired = async () => {
-		const blocksCount = this.api.blocks.getBlocksCount();
-
-		for (let i = 0; i < blocksCount; i++) {
-			const blockAPI = this.api.blocks.getBlockByIndex(i);
-			if (blockAPI) {
-				const blockData = await blockAPI.save();
-				console.log('Block Data:', blockData);
-				if (blockData.data.groupId === this.data.groupId) {
-					console.log(this.data.required);
-					this.api.blocks.update(blockAPI.id, { ...blockData, required: !this.data.required });
-				}
+	protected toggleRequired = async () => {
+		const blockData = await this.api.saver.save();
+		blockData.blocks.map((e) => {
+			if (e.data.groupId === this.data.groupId && e.id) {
+				this.api.blocks.update(e.id, { ...e.data, required: !e.data.required });
 			}
-		}
+		});
+	};
+
+	protected updateRequiredButton = async () => {
+		const blockData = await this.api.saver.save();
+		blockData.blocks.map((e) => {
+			if (e.data.groupId === this.data.groupId && e.id) {
+				this.api.blocks.update(e.id, { ...e.data, required: !e.data.required });
+			}
+		});
 	};
 
 	save(blockContent: HTMLElement) {
@@ -92,7 +118,14 @@ export class CheckboxBlock extends BaseBlock {
 			titleBlockId: this.titleBlockId,
 			first: this.data.first,
 			last: this.data.last,
-			groupId: this.data.groupId
+			groupId: this.data.groupId,
+			index: this.data.index
 		};
+	}
+	async destroy() {
+		const blockData = await this.api.saver.save();
+		if (blockData.blocks.length <= 1) return;
+		console.log(blockData.blocks.length);
+		this.api.blocks.update(blockData.blocks.at(-2)?.id ?? '', { last: true });
 	}
 }

@@ -138,3 +138,14 @@
 		</div>
 	</div>
 </main>
+
+<style>
+	.ce-toolbar__delete-button {
+		cursor: pointer;
+		padding: 5px;
+		font-size: 16px;
+	}
+	.ce-toolbar__delete-button:hover {
+		color: red;
+	}
+</style>
