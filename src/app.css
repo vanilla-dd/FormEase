@@ -37,7 +37,7 @@ body {
 	}
 
 	.requiredButton {
-		@apply absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#f3f3f3] pt-1.5 text-sm font-semibold before:invisible before:absolute before:-top-8 before:rounded-md before:bg-black before:px-2.5 before:py-1 before:text-xs before:opacity-0 before:transition-opacity before:delay-500 before:content-["Required"] hover:before:visible hover:before:opacity-100 dark:bg-[#242424] dark:text-[#d8d8d8];
+		@apply absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#f3f3f3] pt-1.5 text-sm font-semibold before:invisible before:absolute before:-top-8 before:rounded-md before:bg-black before:px-2.5 before:py-1 before:text-xs before:text-white before:opacity-0 before:transition-opacity before:delay-500 before:content-["Required"] hover:before:visible hover:before:opacity-100 dark:bg-[#242424] dark:text-[#d8d8d8];
 	}
 
 	.inputWrapper {

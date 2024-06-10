@@ -15,16 +15,19 @@ export function createRequiredButton(
 
 export function createCheckbox(labelText: string, checked: boolean, onChange: () => void) {
 	const input = document.createElement('input');
+	input.id = 'required';
 	input.type = 'checkbox';
 	input.checked = checked;
 	input.addEventListener('change', onChange);
 
 	const label = document.createElement('label');
+	label.htmlFor = 'required';
 	label.innerText = labelText;
-	label.classList.add('cdx-settings-button');
+	label.classList.add('cdx-settings-button', 'font-medium', 'text-[14px]');
 	label.append(input);
 
-	return { label, input };
+	label.classList.add('flex', 'justify-between', 'items-center', 'w-full', 'px-3', 'rounded-md');
+	return { label };
 }
 
 export function addEventListenersToBlock(block: HTMLElement, api: API) {

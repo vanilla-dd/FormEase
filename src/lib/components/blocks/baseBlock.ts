@@ -48,16 +48,38 @@ export class BaseBlock {
 	public renderSettings(): HTMLElement {
 		const wrapper = document.createElement('div');
 		const requiredToggle = createCheckbox('Required', this.data.required, this.toggleRequired);
-		const titleButton = document.createElement('button');
+		const titleButton = document.createElement('label');
+		titleButton.htmlFor = 'title';
 		titleButton.innerText = 'Add Title';
-		titleButton.addEventListener('click', this.addTitle);
+
+		const input = document.createElement('input');
+		input.id = 'title';
+		input.type = 'checkbox';
+		input.addEventListener('click', (e) => {
+			this.addTitle(e);
+		});
+		input.checked = this.titleBlockId ? true : false;
+		titleButton.append(input);
+		titleButton.classList.add(
+			'cdx-settings-button',
+			'text-[14px]',
+			'font-medium',
+			'flex',
+			'justify-between',
+			'items-center',
+			'w-full',
+			'px-3',
+			'rounded-md'
+		);
+
+		wrapper.classList.add('flex', 'flex-col', 'gap-1', 'items-start', 'text-black');
 		wrapper.append(requiredToggle.label, titleButton);
 		return wrapper;
 	}
 
-	private addTitle = (): void => {
+	private addTitle = (e: Event): void => {
 		if (this.titleBlockId) {
-			alert('A Title block already exists for this block.');
+			e.preventDefault();
 			return;
 		}
 		const titleBlock = this.api.blocks.insert(
