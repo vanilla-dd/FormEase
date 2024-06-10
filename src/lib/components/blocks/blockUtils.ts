@@ -36,10 +36,19 @@ export function addEventListenersToBlock(block: HTMLElement, api: API) {
 	});
 
 	block.addEventListener('keydown', (e) => {
-		if (e.key === 'Backspace' && block.innerText === '') {
-			api.blocks.delete();
+		if (e.key === 'Backspace' && block.innerText.trim() === '') {
+			e.preventDefault();
+			e.stopPropagation();
+			const blockIndex = api.blocks.getCurrentBlockIndex();
+			if (blockIndex !== -1) {
+				api.blocks.delete(blockIndex);
+			}
+			api.caret.setToPreviousBlock('end', blockIndex);
 		} else if (e.key === 'Enter') {
+			e.preventDefault();
+			e.stopPropagation();
 			api.blocks.insert();
+			api.caret.setToNextBlock();
 		}
 	});
 }

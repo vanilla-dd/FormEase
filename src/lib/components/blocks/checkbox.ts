@@ -24,19 +24,16 @@ export class CheckboxBlock extends BaseBlock {
 		};
 	}
 
-	renderSettings() {
-		return super.renderSettings();
-	}
-
 	render() {
 		const wrapper = document.createElement('div');
 		const blockWrapper = document.createElement('div');
 		wrapper.classList.add('flex', 'flex-col', 'gap-2', 'w-1/4', 'relative', 'pb-4');
 		blockWrapper.classList.add('flex', 'gap-2');
+
 		const block = document.createElement('div');
 		const checkboxDiv = document.createElement('div');
 		checkboxDiv.classList.add('w-6', 'h-6', 'border', 'rounded-md', 'custom-box-shadow');
-		block.setAttribute('data-index', this.data.index + 1);
+		block.setAttribute('data-index', (this.data.index + 1).toString());
 		block.classList.add(
 			'inputBlock',
 			`before:content-["Option_"attr(data-index)]`,
@@ -45,6 +42,7 @@ export class CheckboxBlock extends BaseBlock {
 			'relative'
 		);
 		block.setAttribute('contentEditable', 'true');
+		block.innerText = this.data.text;
 		blockWrapper.append(checkboxDiv, block);
 		addEventListenersToBlock(block, this.api);
 
@@ -65,16 +63,19 @@ export class CheckboxBlock extends BaseBlock {
 		}
 
 		if (this.data.first) {
-			this.requiredButton.addEventListener('click', this.toggleRequired);
 			wrapper.append(this.requiredButton);
+			// this.requiredButton.addEventListener('click', this.toggleRequired);
 		}
 
 		return wrapper;
 	}
 
-	addNewOption() {
-		this.data.last = false;
-		this.api.blocks.update(this.block.id, this.data);
+	async addNewOption() {
+		this.api.blocks.update(this.block.id, {
+			...this.data,
+			last: false,
+			text: await this.block.save().then((e) => e.data.text)
+		});
 
 		const currentIndex = this.api.blocks.getCurrentBlockIndex();
 		this.api.blocks.insert(
@@ -85,7 +86,7 @@ export class CheckboxBlock extends BaseBlock {
 				first: false,
 				last: true,
 				groupId: this.data.groupId,
-				index: currentIndex + 1
+				index: this.data.index + 1
 			},
 			{},
 			currentIndex + 1
@@ -93,27 +94,21 @@ export class CheckboxBlock extends BaseBlock {
 	}
 
 	protected toggleRequired = async () => {
+		const newRequired = !this.data.required;
 		const blockData = await this.api.saver.save();
-		blockData.blocks.map((e) => {
+		blockData.blocks.forEach((e) => {
 			if (e.data.groupId === this.data.groupId && e.id) {
-				this.api.blocks.update(e.id, { ...e.data, required: !e.data.required });
+				this.api.blocks.update(e.id, { ...e.data, required: newRequired });
 			}
 		});
-	};
-
-	protected updateRequiredButton = async () => {
-		const blockData = await this.api.saver.save();
-		blockData.blocks.map((e) => {
-			if (e.data.groupId === this.data.groupId && e.id) {
-				this.api.blocks.update(e.id, { ...e.data, required: !e.data.required });
-			}
-		});
+		this.data.required = newRequired;
+		this.updateRequiredButton();
 	};
 
 	save(blockContent: HTMLElement) {
 		const block: HTMLDivElement | null = blockContent.querySelector('.inputBlock');
 		return {
-			text: block ? block.innerText.trim() : '',
+			text: block ? block.innerText : '',
 			required: this.data.required,
 			titleBlockId: this.titleBlockId,
 			first: this.data.first,
@@ -122,10 +117,30 @@ export class CheckboxBlock extends BaseBlock {
 			index: this.data.index
 		};
 	}
+
 	async destroy() {
 		const blockData = await this.api.saver.save();
-		if (blockData.blocks.length <= 1) return;
-		console.log(blockData.blocks.length);
-		this.api.blocks.update(blockData.blocks.at(-2)?.id ?? '', { last: true });
+		const deletedIndex = blockData.blocks.findIndex((block) => block.id === this.block.id);
+		const groupId = this.data.groupId;
+
+		// Update the first block if the current block is first
+		if (this.data.first && blockData.blocks[deletedIndex + 1]?.data.groupId === groupId) {
+			const nextBlock = blockData.blocks[deletedIndex + 1];
+			if (nextBlock && nextBlock.id) {
+				this.api.blocks.update(nextBlock.id, { ...nextBlock.data, first: true });
+			}
+		}
+		if (blockData.blocks.length >= 1 && this.data.last) {
+			this.api.blocks.update(blockData.blocks.at(-2)?.id ?? '', { last: true });
+		}
+		// TODO: Fix indexing
+
+		// for (let i = deletedIndex + 1; i < blockData.blocks.length; i++) {
+		// 	const block = blockData.blocks[i];
+		// 	if (block && block.data.groupId === groupId && block.id) {
+		// 		const newIndex = block.data.index - 1;
+		// 		this.api.blocks.update(block.id, { index: newIndex });
+		// 	}
+		// }
 	}
 }
