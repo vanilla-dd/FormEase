@@ -37,6 +37,7 @@ Make form within minutes...
 - [ ] **Duplicate, delete, hide, min-max, default answer functionality**
 - [x] **Basic Custom styles**
 - [ ] **Make CSS variables to make custom styles easy**
+- [ ] **Fix flashing issue**
 - [ ] **Form embed**
 - [ ] **Prebuilt Questions**
 - [ ] **Prebuilt Templates?**

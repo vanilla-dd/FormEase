@@ -16,6 +16,7 @@
 		Title,
 		CheckboxBlock
 	} from '$lib/components/blocks/index';
+	import { PhoneNumberBlock } from '$lib/components/blocks/phoneNumber';
 
 	let editor: any;
 	let logoImg: HTMLImageElement;
@@ -33,6 +34,7 @@
 				longAnswer: LongAnswerBlock,
 				link: LinkBlock,
 				number: NumberBlock,
+				phoneNumber: PhoneNumberBlock,
 				date: DateBlock,
 				rating: RatingBlock,
 				linearRating: LinearRatingBlock

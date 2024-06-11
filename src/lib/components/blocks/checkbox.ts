@@ -130,7 +130,6 @@ export class CheckboxBlock extends BaseBlock {
 		const deletedIndex = blockData.blocks.findIndex((block) => block.id === this.block.id);
 		const groupId = this.data.groupId;
 
-		// Update the first block if the current block is first
 		if (this.data.first && blockData.blocks[deletedIndex + 1]?.data.groupId === groupId) {
 			const nextBlock = blockData.blocks[deletedIndex + 1];
 			if (nextBlock && nextBlock.id) {
@@ -146,11 +145,10 @@ export class CheckboxBlock extends BaseBlock {
 			if (preBlock && preBlock.id)
 				this.api.blocks.update(preBlock.id, { ...preBlock.data, last: true });
 		}
-		// TODO: Fix indexing
+
 		blockData = await this.api.saver.save();
 		for (let i = deletedIndex; i < blockData.blocks.length; i++) {
 			const block = blockData.blocks[i];
-			console.log(block);
 			if (block && block.data.groupId === groupId && block.id) {
 				const newIndex = block.data.index - 1;
 				this.api.blocks.update(block.id, { index: newIndex });
