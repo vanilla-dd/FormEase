@@ -15,7 +15,8 @@ export const FormBuilderData = persisted('FormBuilderData', {
 	formMetaData: {
 		title: '',
 		cover: '',
-		logo: ''
+		logo: '',
+		buttonText: ''
 	},
 	data: {} as OutputData
 });

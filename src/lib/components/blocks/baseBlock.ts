@@ -91,6 +91,7 @@ export class BaseBlock {
 		this.titleBlockId = titleBlock.id;
 		this.updateRequiredButton();
 	};
+
 	destroy() {
 		if (this.titleBlockId) {
 			const titleBlock = this.api.blocks.getById(this.titleBlockId);

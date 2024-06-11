@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-
 	import { FormBuilderData } from '$lib/localStorage';
 	import { get } from 'svelte/store';
 	import { ArrowRight, ChevronRight } from 'lucide-svelte';
 	import FormCover from '$lib/components/FormCover.svelte';
+	import * as Popover from '$lib/components/ui/popover';
 	import {
 		DateBlock,
 		LinearRatingBlock,
@@ -14,13 +14,17 @@
 		RatingBlock,
 		ShortAnswerBlock,
 		Title,
-		CheckboxBlock
+		CheckboxBlock,
+		PhoneNumberBlock
 	} from '$lib/components/blocks/index';
-	import { PhoneNumberBlock } from '$lib/components/blocks/phoneNumber';
 
 	let editor: any;
 	let logoImg: HTMLImageElement;
+
+	let popoverOpenState = false;
+
 	const StoredFormBuilderData = get(FormBuilderData);
+
 	onMount(async () => {
 		const EditorJs = (await import('@editorjs/editorjs')).default;
 		// const Undo = await import('editorjs-undo');
@@ -127,15 +131,54 @@
 			</div>
 			<div id="editorjs" class="min-h-[300px] md:mr-11" />
 			<div class="md:pl-2">
-				<button
-					style="background-color: {$FormBuilderData.settings.theme === 'custom'
-						? $FormBuilderData.settings.colors?.buttonBackground
-						: ''};color:{$FormBuilderData.settings?.theme === 'custom'
-						? $FormBuilderData.settings.colors?.buttonText
-						: ''}"
-					class="flex items-center gap-1 self-start rounded-md bg-black px-4 py-2 font-bold text-white dark:bg-[#7957FF] dark:text-white"
-					>Submit <ArrowRight class="h-4 w-4 stroke-2" /></button
-				>
+				<Popover.Root bind:open={popoverOpenState}>
+					<Popover.Trigger>
+						<button
+							style="background-color: {$FormBuilderData.settings.theme === 'custom'
+								? $FormBuilderData.settings.colors?.buttonBackground
+								: ''};color:{$FormBuilderData.settings?.theme === 'custom'
+								? $FormBuilderData.settings.colors?.buttonText
+								: ''}"
+							class="flex items-center gap-1 self-start rounded-md bg-black px-4 py-2 font-bold text-white dark:bg-[#7957FF] dark:text-white"
+							>{$FormBuilderData.formMetaData?.buttonText ?? 'Submit'}
+							<ArrowRight class="h-4 w-4 stroke-2" /></button
+						>
+					</Popover.Trigger>
+					<Popover.Content
+						side="bottom"
+						class="w-fit px-0 py-1.5"
+						align="start"
+						alignOffset={-40}
+						sideOffset={2}
+					>
+						<p class="px-3.5 pb-2 pt-1.5 text-xs">Button Label</p>
+						<div class="px-2.5 py-2">
+							<input
+								type="text"
+								class="custom-box-shadow h-7 w-full rounded-md px-2.5 text-sm"
+								value={$FormBuilderData.formMetaData?.buttonText ?? ''}
+								on:keydown={(e) => {
+									if (e.key === 'Enter') {
+										e.preventDefault();
+										popoverOpenState = !popoverOpenState;
+									}
+								}}
+								on:input={(e) => {
+									console.log(e.currentTarget);
+									FormBuilderData.update((curr) => {
+										return {
+											...curr,
+											formMetaData: {
+												...curr.formMetaData,
+												buttonText: e.currentTarget.value
+											}
+										};
+									});
+								}}
+							/>
+						</div>
+					</Popover.Content>
+				</Popover.Root>
 			</div>
 		</div>
 	</div>

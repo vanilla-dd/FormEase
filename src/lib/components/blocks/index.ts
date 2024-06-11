@@ -7,6 +7,7 @@ import { NumberBlock } from '$lib/components/blocks/number';
 import { LinearRatingBlock } from '$lib/components/blocks/linearRating';
 import { Title } from '$lib/components/blocks/Title';
 import { CheckboxBlock } from '$lib/components/blocks/checkbox';
+import { PhoneNumberBlock } from './phoneNumber';
 
 export {
 	ShortAnswerBlock,
@@ -17,5 +18,6 @@ export {
 	RatingBlock,
 	NumberBlock,
 	Title,
-	CheckboxBlock
+	CheckboxBlock,
+	PhoneNumberBlock
 };

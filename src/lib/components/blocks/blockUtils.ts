@@ -32,6 +32,13 @@ export function createCheckbox(labelText: string, checked: boolean, onChange: ()
 
 export function addEventListenersToBlock(block: HTMLElement, api: API) {
 	block.addEventListener('input', () => {
+		if (block.dataset.index) {
+			block.classList.toggle(
+				`before:content-["Option_"attr(data-index)]`,
+				block.innerText.trim() === ''
+			);
+			return;
+		}
 		block.classList.toggle(
 			"before:focus:content-['Type_placeholder_text']",
 			block.innerText.trim() === ''
@@ -39,19 +46,18 @@ export function addEventListenersToBlock(block: HTMLElement, api: API) {
 	});
 
 	block.addEventListener('keydown', (e) => {
+		const blockIndex = api.blocks.getCurrentBlockIndex();
 		if (e.key === 'Backspace' && block.innerText.trim() === '') {
 			e.preventDefault();
-			e.stopPropagation();
-			const blockIndex = api.blocks.getCurrentBlockIndex();
 			if (blockIndex !== -1) {
 				api.blocks.delete(blockIndex);
 			}
-			api.caret.setToPreviousBlock('end', blockIndex);
+			api.caret.setToBlock(blockIndex);
 		} else if (e.key === 'Enter') {
 			e.preventDefault();
 			e.stopPropagation();
-			api.blocks.insert();
-			api.caret.setToNextBlock();
+			const block = api.blocks.insert();
+			api.caret.setToBlock(api.blocks.getBlockIndex(block.id));
 		}
 	});
 }
