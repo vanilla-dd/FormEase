@@ -49,13 +49,13 @@ export function addEventListenersToBlock(block: HTMLElement, api: API) {
 		const blockIndex = api.blocks.getCurrentBlockIndex();
 		if (e.key === 'Backspace' && block.innerText.trim() === '') {
 			e.preventDefault();
-			if (blockIndex !== -1) {
-				api.blocks.delete(blockIndex);
-			}
-			api.caret.setToBlock(blockIndex);
+			e.stopPropagation();
+			const block = api.blocks.getBlockByIndex(blockIndex - 1);
+			api.blocks.delete();
 		} else if (e.key === 'Enter') {
 			e.preventDefault();
 			e.stopPropagation();
+
 			const block = api.blocks.insert();
 			api.caret.setToBlock(api.blocks.getBlockIndex(block.id));
 		}
